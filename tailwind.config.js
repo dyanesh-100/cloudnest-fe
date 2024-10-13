@@ -11,6 +11,7 @@ export default {
         grey : '#8B9AB1',
         black : '#313133',
         lightGrey : '#DBDCE0',
+        paleBlue : '#E9EEF6',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'], 
