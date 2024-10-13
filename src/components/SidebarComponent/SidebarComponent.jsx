@@ -20,7 +20,7 @@ const SidebarComponent = () => {
     const maxStorage = 50;
     const usagePercentage = (usedStorage / maxStorage) * 100;
 
-    // Token verification and data fetching
+    
     useEffect(() => {
         const fetchFilesAndFolders = async () => {
             try {
@@ -29,7 +29,7 @@ const SidebarComponent = () => {
                     const response = await axios.post('http://localhost:3500/api/v1/cloudnest', { token });
                     setFileAndFolderData(response.data.data); // Set the fetched data here
                 } else {
-                    // If no token, navigate to login page
+                    
                     navigate('/login');
                 }
             } catch (error) {
@@ -112,9 +112,9 @@ const SidebarComponent = () => {
                         <Route exact path='/favourites' element={<FavouritesPageComponent />} />
                     </Routes>
                 </div>
-                {/* <div className="profile-container lg:w-1/5 xl:w-1/6 flex flex-col justify-between">
+                <div className="profile-container lg:w-1/5 xl:w-1/6 flex flex-col justify-between">
                     <ProfilebarComponent /> 
-                </div> */}
+                </div>
 
             </div>
         
