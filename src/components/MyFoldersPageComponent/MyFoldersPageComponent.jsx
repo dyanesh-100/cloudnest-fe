@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../axiosInstance'; // Adjust the path as necessary
-import FolderList from '../FolderListComponent/FolderListComponent'; // Importing FolderList
+import axiosInstance from '../../axiosInstance'; 
+import FolderList from '../FolderListComponent/FolderListComponent'; 
 import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const MyFoldersComponent = () => {
   const [folders, setFolders] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isCreatingFolder, setIsCreatingFolder] = useState(false); // State to control the form visibility
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false); 
 
   
   const fetchFolders = async () => {

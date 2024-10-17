@@ -4,7 +4,7 @@ import axiosInstance from '../../axiosInstance';
 import { FileUp } from 'lucide-react';
 
 const FileUploadComponent = ({ currentFolderId, onUploadSuccess }) => {
-  // Handle file drop and trigger the upload
+  
   const onDrop = useCallback((acceptedFiles) => {
     uploadFiles(acceptedFiles);
   }, [currentFolderId]);

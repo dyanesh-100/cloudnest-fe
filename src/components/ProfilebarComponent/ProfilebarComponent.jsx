@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import DP from '../../assets/images/default-dp.jpg'; // Profile picture
+import DP from '../../assets/images/default-dp.jpg'; 
 import doc from '../../assets/images/default-cover.png';
 import image from '../../assets/images/image-logo.webp';
 import video from '../../assets/images/video-logo.png';

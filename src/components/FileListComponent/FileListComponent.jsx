@@ -13,14 +13,14 @@ const FileList = ({ files, searchQuery }) => {
 
   const handleDownloadFile = async (fileId) => {
     try {
-      const downloadUrl = await downloadFileToLocal(fileId); // Assumes the utility function returns the signed URL
+      const downloadUrl = await downloadFileToLocal(fileId);
 
-      // Dynamically create an anchor element for downloading
-      const link = document.createElement('a'); // Create an <a> element dynamically
-      link.href = downloadUrl; // Set the URL to download
-      link.target = '_blank'; // Open in a new tab
-      link.rel = 'noopener noreferrer'; // Prevent the new tab from accessing the current window object
-      link.click(); // Trigger the download by programmatically clicking the link
+      
+      const link = document.createElement('a'); 
+      link.href = downloadUrl;
+      link.target = '_blank'; 
+      link.rel = 'noopener noreferrer'; 
+      link.click(); 
     } catch (error) {
       console.error('Error downloading the file:', error);
     }

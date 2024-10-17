@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import FileList from '../FileListComponent/FileListComponent'; // Import the file list component
-import SearchBar from '../SearchBarComponent/SearchBarComponent'; // Import the search bar component
-import { getFileIcon, downloadFileToLocal } from '../../utils/utils'; // Import your utility function for file icons and download function
+import FileList from '../FileListComponent/FileListComponent'; 
+import SearchBar from '../SearchBarComponent/SearchBarComponent'; 
+import { getFileIcon, downloadFileToLocal } from '../../utils/utils'; 
 import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
 import { EllipsisVertical } from 'lucide-react';
 import axiosInstance from '../../axiosInstance';
@@ -9,7 +9,7 @@ import axiosInstance from '../../axiosInstance';
 const MyFilesComponent = () => {
   const [fileData, setFileData] = useState([]); 
   const [searchQuery, setSearchQuery] = useState('');
-  const [showOptions, setShowOptions] = useState(null); // State for managing dropdown visibility
+  const [showOptions, setShowOptions] = useState(null); 
 
   const fetchFiles = async () => {
     try {
@@ -38,7 +38,7 @@ const MyFilesComponent = () => {
   };
 
   const handleToggleOptions = (fileId) => {
-    setShowOptions(prev => (prev === fileId ? null : fileId)); // Toggle dropdown visibility
+    setShowOptions(prev => (prev === fileId ? null : fileId)); 
   };
 
   const sortedFiles = [...fileData].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -59,7 +59,7 @@ const MyFilesComponent = () => {
                     <p className='text-sm pl-3 truncate max-w-[150px]'>{file.fileName}</p>
                     <EllipsisVertical 
                       className='cursor-pointer'
-                      onClick={() => handleToggleOptions(file._id)} // Show options when clicked
+                      onClick={() => handleToggleOptions(file._id)} 
                     />
                   </div>
                 </div>
@@ -68,11 +68,11 @@ const MyFilesComponent = () => {
                 </div>
                 <p className='text-xs'>{new Date(file.createdAt).toLocaleString()}</p>
 
-                {showOptions === file._id && ( // Render dropdown if options are visible
+                {showOptions === file._id && ( 
                   <div className="absolute z-50 bg-white rounded-md shadow-lg border"
                        style={{ top: '40px', right: '10px' }}>
                     <button
-                      onClick={() => handleDownloadFile(file._id)} // Call download on button click
+                      onClick={() => handleDownloadFile(file._id)} 
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
                     >
                       Download

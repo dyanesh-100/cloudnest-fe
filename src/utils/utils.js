@@ -34,23 +34,23 @@ const fileFormatIcons = {
 
   
 
-// Function to handle file download
+
 export const downloadFileToLocal = async (fileId) => {
   try {
-    // Make an API request to get the signed URL for the file
+    
     const response = await axiosInstance.get(`/download/${fileId}`);
     
     const downloadUrl = response.data.downloadUrl;
 
     if (downloadUrl) {
-      // Trigger file download by creating a hidden link
+      
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', ''); // The filename is optional, browser handles the actual name.
+      link.setAttribute('download', ''); 
       document.body.appendChild(link);
       link.click();
 
-      // Clean up the link element after download
+      
       document.body.removeChild(link);
     } else {
       console.error('No download URL provided');
