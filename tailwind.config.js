@@ -12,12 +12,15 @@ export default {
         black : '#313133',
         lightGrey : '#DBDCE0',
         paleBlue : '#E9EEF6',
+        lightBlue :'#2E80ED'
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'], 
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')({ nocompatible: true }),
+  ],
 }
 

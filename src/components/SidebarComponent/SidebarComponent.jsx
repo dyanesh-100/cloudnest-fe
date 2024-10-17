@@ -9,48 +9,70 @@ import MyFoldersPageComponent from '../MyFoldersPageComponent/MyFoldersPageCompo
 import RecentsPageComponent from '../RecentsPageComponent/RecentsPageComponent';
 import FavouritesPageComponent from '../FavouritesPageComponent/FavouritesPageComponent';
 import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
-import axios from 'axios';
-import { Token } from '@mui/icons-material';
+
+import {bytesToGB} from '../../utils/utils';
+import axiosInstance from '../../axiosInstance';
 
 const SidebarComponent = () => {
-    const [usedStorage, setUsedStorage] = useState(8.42);
-    const [fileAndFolderData, setFileAndFolderData] = useState([]); // Store file and folder data here
+    const [totalUsedStorage, setTotalUsedStorage] = useState(0);
+    const [categorizedSizes ,setCategorizedSize ] = useState({
+        documentSize : 0,
+        videoSize : 0,
+        audioSize : 0,
+        imageSize : 0
+    })
+    const [fileData, setFileData] = useState([]); 
+    const [folderData, setFolderData] = useState([]); 
+    
     const navigate = useNavigate();
 
-    const maxStorage = 50;
-    const usagePercentage = (usedStorage / maxStorage) * 100;
+    const maxStorage = 3;
+    const usagePercentage = (totalUsedStorage / maxStorage) * 100;
+    
 
     
     useEffect(() => {
         const fetchFilesAndFolders = async () => {
             try {
-                const token = window.localStorage.getItem('token');
-                if (token) {
-                    const response = await axios.post('http://localhost:3500/api/v1/cloudnest', { token });
-                    setFileAndFolderData(response.data.data); // Set the fetched data here
-                } else {
+                    const responseFolders = await axiosInstance.get('/folders')
+                    setFolderData(responseFolders.data.data)
+
+                    const responseFiles = await axiosInstance.post('/files');
+                    setFileData(responseFiles.data.data);
+                    setTotalUsedStorage(responseFiles.data.totalStorageUsed)
+                    const{documentSize, videoSize, audioSize, imageSize} = responseFiles.data.categorizedSizes
                     
-                    navigate('/login');
-                }
+                    setCategorizedSize({
+                        documentSize,
+                        videoSize,
+                        audioSize,
+                        imageSize
+                    })
+                
+                
             } catch (error) {
                 alert(`Status: ${error.response?.status || 500} - ${error.response?.data.message || "Server Error"}`);
+                if(error.response?.status === 401){
+                    navigate('/login');
+                }
             }
         };
         fetchFilesAndFolders();
     }, [navigate]);
 
+    const fileAndFolderData = { folders: folderData, files: fileData };
     
 
     return (
         
             <div className="flex h-screen">
                 
-                <div className='sidebar-container font-inter bg-white lg:w-1/5 xl:w-1/6 rounded-l-3xl h-screen flex flex-col justify-between'>
+                <div className='sidebar-container font-inter bg-white lg:w-1/5 xl:w-1/6  rounded-l-3xl h-screen flex flex-col justify-between flex-shrink-0'>
                     <div className=''>
                         <Link to='/' className='flex gap-3 items-center py-10 px-8'>
-                            <img src={logo} alt="" className='w-16 sm:w-14 md:w-16 lg:w-18 xl:w-20 rounded-full' />
+                            <img src={logo} alt="" className=' sm:w-14 md:w-16 lg:w-18 xl:w-20 rounded-full' />
                             <div className=''>
-                                <p className='text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'>CloudNest</p>
+                                <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>
                                 <p className='text-grey'>Trusted Cloud</p>
                             </div>
                         </Link>
@@ -69,14 +91,14 @@ const SidebarComponent = () => {
                                 <FolderClosed />
                                 <p>My Folders</p>
                             </Link>
-                            <Link to='/cloudnest/recents' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                            {/* <Link to='/cloudnest/recents' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                                 <Clock />
                                 <p>Recents</p>
                             </Link>
                             <Link to='/cloudnest/favourites' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                                 <Star />
                                 <p>Favourites</p>
-                            </Link>
+                            </Link> */}
                         </div>
                     </div>
 
@@ -93,7 +115,7 @@ const SidebarComponent = () => {
                                 className="!h-2 w-full rounded-md mt-4"
                             />
                             <div className="text-sm text-gray-600 mt-2">
-                                {usedStorage} GB of {maxStorage} GB used
+                                {bytesToGB(totalUsedStorage)} GB of {maxStorage} GB used
                             </div>
                         </div>
                     </div>
@@ -102,18 +124,19 @@ const SidebarComponent = () => {
                 <div className="border-l border-lightGrey h-screen"></div> 
 
                
-                <div className="flex-grow overflow-y-auto">
+                <div className="dynamic-container flex-grow overflow-y-auto scrollbar-thin max-w-[75%] font-inter">
                     
                     <Routes>
                         <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData}/>} />
-                        <Route exact path='/myfiles' element={<MyFilesPageComponent />} />
-                        <Route exact path='/myfolders' element={<MyFoldersPageComponent />} />
-                        <Route exact path='/recents' element={<RecentsPageComponent />} />
-                        <Route exact path='/favourites' element={<FavouritesPageComponent />} />
+                        <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData}/>} />
+                        <Route exact path='/myfolders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData}/>} />
+                        {/* <Route exact path='/recents' element={<RecentsPageComponent fileAndFolderData={fileAndFolderData}/>} />
+                        <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData}/>} /> */}
+                        
                     </Routes>
                 </div>
-                <div className="profile-container lg:w-1/5 xl:w-1/6 flex flex-col justify-between">
-                    <ProfilebarComponent /> 
+                <div className="profile-container lg: w-1/4 xl:w-1/5  flex flex-col justify-between font-inter flex-shrink-0">
+                    <ProfilebarComponent categorizedSizes = {categorizedSizes}/> 
                 </div>
 
             </div>

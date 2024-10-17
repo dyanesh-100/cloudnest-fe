@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 const App = () => {
   return (
     <React.Fragment>
-      {/* <SidebarComponent/> */}
+      
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginComponent/>} />

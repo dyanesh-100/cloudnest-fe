@@ -15,6 +15,8 @@ const LoginComponent = () => {
     const submitHandler = (event) => {
         event.preventDefault();
         axios
+        
+        
             .post(`http://localhost:3500/api/v1/login`, {
                 email: email,
                 password: password
@@ -34,7 +36,7 @@ const LoginComponent = () => {
     return (
         <Container maxWidth="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             <Paper elevation={3} style={{ padding: '40px', width: '100%' }}>
-                {/* Logo and Brand Name */}
+                
                 <Box display="flex" alignItems="center" justifyContent="center" marginBottom={4}>
                     <img src={logo} alt="Brand Logo" style={{ width: '80px', height: '80px', marginRight: '15px', borderRadius: '10%' }} />
                     <Typography variant="h4" style={{ fontWeight: 'bold', color: '#333' }}>
