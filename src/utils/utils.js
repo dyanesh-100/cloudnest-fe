@@ -34,29 +34,25 @@ const fileFormatIcons = {
 
   
 
-
-export const downloadFileToLocal = async (fileId) => {
-  try {
-    
-    const response = await axiosInstance.get(`/download/${fileId}`);
-    
-    const downloadUrl = response.data.downloadUrl;
-
-    if (downloadUrl) {
-      
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.setAttribute('download', ''); 
-      document.body.appendChild(link);
-      link.click();
-
-      
-      document.body.removeChild(link);
-    } else {
-      console.error('No download URL provided');
+  export const downloadFileToLocal = async (fileId) => {
+    try {
+      const response = await axiosInstance.get(`/download/${fileId}`);
+      const downloadUrl = response.data.downloadUrl;
+  
+      if (downloadUrl) {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', ''); 
+        link.setAttribute('target', '_blank'); // Open in new tab
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.error('No download URL provided');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      alert('Failed to download file. Please try again later.');
     }
-  } catch (error) {
-    console.error('Error downloading file:', error);
-    alert('Failed to download file. Please try again later.');
-  }
-};
+  };
+  
