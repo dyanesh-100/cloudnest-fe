@@ -43,7 +43,7 @@ const fileFormatIcons = {
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.setAttribute('download', ''); 
-        link.setAttribute('target', '_blank'); // Open in new tab
+        link.setAttribute('target', '_blank'); 
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
