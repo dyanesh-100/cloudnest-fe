@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import logo from '../../assets/images/logo3.png';
 import { Link } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Paper, Box } from '@mui/material';
+import axiosInstance from '../../axiosInstance';
 
 const SignUpComponent = () => {
     const [firstName, setFirstName] = useState('');
@@ -18,7 +19,7 @@ const SignUpComponent = () => {
     const submitHandler = (event) => {
         event.preventDefault();
 
-        axios.post(`http://localhost:3500/api/v1/signup`, { firstName, lastName, email, password })
+        axiosInstance.post(`/signup`, { firstName, lastName, email, password })
             .then((response) => {
                 alert(`Successfully created account for ${response.data.firstName} ${response.data.lastName}`);
                 window.location.href = '/';

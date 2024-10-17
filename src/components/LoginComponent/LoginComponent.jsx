@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import logo from '../../assets/images/logo3.png'; 
 import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Paper, Box } from '@mui/material';
+import axiosInstance from '../../axiosInstance';
 
 const LoginComponent = () => {
     const [email, setEmail] = useState('');
@@ -14,10 +15,10 @@ const LoginComponent = () => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        axios
+        axiosInstance
         
         
-            .post(`http://localhost:3500/api/v1/login`, {
+            .post(`/login`, {
                 email: email,
                 password: password
             })
