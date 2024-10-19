@@ -1,13 +1,27 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import FileList from '../FileListComponent/FileListComponent';
 import FolderList from '../FolderListComponent/FolderListComponent'; 
 import SearchBar from '../SearchBarComponent/SearchBarComponent'; 
 
-const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] } }) => {
-  const { folders, files } = fileAndFolderData;
-  
+const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onDownloadFile, onDeleteFile }) => {
+  const { folders, files = [] } = fileAndFolderData; // Ensure files is an array
   const [searchQuery, setSearchQuery] = useState('');
+  
+  
+  const handleFileDeletion = (fileId) => {
+    onDeleteFile(fileId); // Call the passed down delete function
+  };
+
+  const myFilesFilter = (file) => {
+    return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
+  };
+  
+
+  console.log('File and Folder Data:', fileAndFolderData); // Debug log for data
+
+  if (files.length === 0) {
+    return <p>No files available</p>; // Handling when there are no files
+  }
 
   return (
     <React.Fragment>
@@ -20,7 +34,12 @@ const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] } }) =
           <FolderList folders={folders} searchQuery={searchQuery} /> 
 
           <p className='mt-10 mb-10 text-2xl font-semibold'>Suggested files</p>
-          <FileList files={files} searchQuery={searchQuery} /> 
+          <FileList 
+            files={files.filter(myFilesFilter)} // Apply filtering here
+            searchQuery={searchQuery} 
+            onDownloadFile={onDownloadFile} 
+            onDeleteFile={handleFileDeletion} 
+          /> 
         </div>
       </div>
     </React.Fragment>

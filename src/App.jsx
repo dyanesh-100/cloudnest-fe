@@ -8,14 +8,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 const App = () => {
   return (
     <React.Fragment>
+      <div>
+        <BrowserRouter>
+          <Routes >
+            <Route path="/" element={<LoginComponent/>} />
+            <Route path="/signup" element={<SignUpComponent/>} />
+            <Route path="/cloudnest/*"  element={<SidebarComponent/>}/>             
+          </Routes>
+        </BrowserRouter>
+      </div>
       
-      <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginComponent/>} />
-        <Route path="/signup" element={<SignUpComponent/>} />
-        <Route path="/cloudnest/*"  element={<SidebarComponent/>}/>             
-      </Routes>
-    </BrowserRouter>
       
     </React.Fragment>
   )

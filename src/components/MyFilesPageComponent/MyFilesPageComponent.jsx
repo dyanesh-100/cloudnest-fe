@@ -1,133 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import FileList from '../FileListComponent/FileListComponent'; 
-import SearchBar from '../SearchBarComponent/SearchBarComponent'; 
-import { getFileIcon, downloadFileToLocal } from '../../utils/utils'; 
-import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
-import { EllipsisVertical } from 'lucide-react';
 import axiosInstance from '../../axiosInstance';
-import Alert from '@mui/material/Alert'; // Import MUI Alert
-import Stack from '@mui/material/Stack'; // Import MUI Stack for spacing alerts
-import BasicAlerts from '../BasicAlerts/BasicAlerts';
+import FileList from '../FileListComponent/FileListComponent';
+import SearchBar from '../SearchBarComponent/SearchBarComponent';
+import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
 
 const MyFilesComponent = () => {
-  const [fileData, setFileData] = useState([]); 
+  const [fileData, setFileData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showOptions, setShowOptions] = useState(null); 
-  const [alertData, setAlertData] = useState({ visible: false, message: '', severity: 'success' });
-
   
-  const fetchFiles = async () => {
-    try {
-      const response = await axiosInstance.get('/files');
-      setFileData(response.data.data); 
-    } catch (error) {
-      console.error('Error fetching files:', error);
-      setAlertData({ visible: true, message: 'Failed to load files', severity: 'error' });
-    }
-  };
-
   useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const response = await axiosInstance.get('/files');
+        setFileData(response.data.data); 
+      } catch (error) {
+        console.error('Error fetching files:', error);
+        alert('Failed to load files. Please try again.');
+      }
+    };
+
     fetchFiles();
-  }, []); 
+  }, []);
 
-  const handleUploadSuccess = () => {
-    fetchFiles(); 
-    setAlertData({ visible: true, message: 'File uploaded successfully', severity: 'success' });
+  const handleUploadSuccess = (newFile) => {
+    setFileData((prevFiles) => [...prevFiles, newFile]);
+  };
+  const handleDeleteFile = (fileId) => {
+    setFileData((prevFiles) => prevFiles.filter(file => file._id !== fileId));
   };
 
-
-  const handleDownloadFile = async (fileId) => {
-    try {
-      await downloadFileToLocal(fileId);
-    } catch (error) {
-      console.error('Error downloading the file:', error);
-      setAlert({ message: 'Error downloading the file', severity: 'error', visible: true });
-    }
+  // Filter function for recently added files
+  const recentFilesFilter = (file) => {
+    const today = new Date();
+    const fileDate = new Date(file.createdAt);
+    const daysDiff = Math.floor((today - fileDate) / (1000 * 60 * 60 * 24));
+    return daysDiff <= 7; // Show files added in the last week
   };
 
-
-  const handleDeleteFile = async (fileId) => {
-    try {
-      await axiosInstance.delete(`/files/${fileId}`); 
-      setFileData(fileData.filter(file => file._id !== fileId)); // Update UI
-      setAlertData({ visible: true, message: 'File deleted successfully', severity: 'success' });
-    } catch (error) {
-      console.error('Error deleting file:', error);
-      setAlertData({ visible: true, message: 'Failed to delete file', severity: 'error' });
-    }
+  // Filter function for all user files based on the search query
+  const myFilesFilter = (file) => {
+    return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
   };
 
-  const handleToggleOptions = (fileId) => {
-    setShowOptions(prev => (prev === fileId ? null : fileId)); 
-  };
-
-  
-  const sortedFiles = [...fileData].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  const recentFiles = sortedFiles.slice(0, 4);
+  // Sort function to sort files by creation date
+  const sortFn = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
 
   return (
     <div className='bg-white h-screen flex'>
       <div className='px-8 py-16 w-full'>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> 
-
-       
-        <BasicAlerts
-          message={alertData.message}
-          severity={alertData.severity}
-          visible={alertData.visible}
-        />
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         <p className='mt-20 mb-10 text-2xl font-semibold'>Recently Added Files</p>
-        <div className='flex flex-wrap gap-9 '>
-          {recentFiles.length > 0 ? (
-            recentFiles.map((file) => (
-              <div className='bg-paleBlue w-64 py-3 px-5 rounded-xl relative' key={file._id}>
-                <div className='flex items-center leading-none text-black'>
-                  <img src={getFileIcon(file.fileFormat)} alt="" className='w-6' />
-                  <div className='flex justify-between w-full'>
-                    <p className='text-sm pl-3 truncate max-w-[150px]'>{file.fileName}</p>
-                    <EllipsisVertical 
-                      className='cursor-pointer'
-                      onClick={() => handleToggleOptions(file._id)} 
-                    />
-                  </div>
-                </div>
-                <div className='bg-white flex justify-center px-10 py-16 rounded-l my-5'>
-                  <img className='w-14' src={getFileIcon(file.fileFormat)} alt="" />
-                </div>
-                <p className='text-xs'>{new Date(file.createdAt).toLocaleString()}</p>
+        <FileList
+          files={fileData}
+          filterFn={recentFilesFilter}
+          sortFn={sortFn}
+          onDeleteFile={handleDeleteFile}
+        />
 
-                
-                {showOptions === file._id && ( 
-                  <div className="absolute z-50 bg-white rounded-md shadow-lg border"
-                       style={{ top: '40px', right: '10px' }}>
-                    <button
-                      onClick={() => handleDownloadFile(file._id)} 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
-                    >
-                      Download
-                    </button>
-                    <button
-                      onClick={() => handleDeleteFile(file._id)} 
-                      className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 rounded"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No recently added files found.</p>
-          )}
-        </div>
-
-        
         <FileUploadComponent currentFolderId={null} onUploadSuccess={handleUploadSuccess} />
 
-        
-        <p className='mt-20 mb-10 text-2xl font-semibold'>My files</p>
-        <FileList files={fileData} searchQuery={searchQuery} onDeleteFile={handleDeleteFile} /> 
+        <p className='mt-20 mb-10 text-2xl font-semibold'>My Files</p>
+        <FileList
+          files={fileData}
+          filterFn={myFilesFilter}
+          sortFn={sortFn}
+          onDeleteFile={handleDeleteFile}
+        />
       </div>
     </div>
   );

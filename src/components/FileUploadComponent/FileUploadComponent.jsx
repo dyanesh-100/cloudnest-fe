@@ -32,7 +32,8 @@ const FileUploadComponent = ({ currentFolderId, onUploadSuccess }) => {
 
       
       if (typeof onUploadSuccess === 'function') {
-        onUploadSuccess(); 
+        onUploadSuccess(response.data.data);
+        alert("File uploaded successfully") 
       } else {
         console.error('onUploadSuccess is not a function');
       }

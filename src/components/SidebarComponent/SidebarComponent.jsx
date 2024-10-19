@@ -61,13 +61,17 @@ const SidebarComponent = () => {
     }, [navigate]);
 
     const fileAndFolderData = { folders: folderData, files: fileData };
+
+    const handleDeleteFile = (fileId) => {
+        setFileData((prevFiles) => prevFiles.filter(file => file._id !== fileId)); // Remove the deleted file from the list
+    };
     
 
     return (
         
             <div className="flex h-screen">
                 
-                <div className='sidebar-container font-inter bg-white lg:w-1/5 xl:w-1/6  rounded-l-3xl h-screen flex flex-col justify-between flex-shrink-0'>
+                <div className='sidebar-container font-inter bg-white lg:w-1/5 xl:w-1/6 rounded-l-3xl h-screen flex flex-col justify-between flex-shrink-0'>
                     <div className=''>
                         <Link to='/' className='flex gap-3 items-center py-10 px-8'>
                             <img src={logo} alt="" className=' sm:w-14 md:w-16 lg:w-18 xl:w-20 rounded-full' />
@@ -124,10 +128,10 @@ const SidebarComponent = () => {
                 <div className="border-l border-lightGrey h-screen"></div> 
 
                
-                <div className="dynamic-container flex-grow overflow-y-auto scrollbar-thin max-w-[75%] font-inter">
+                <div className="dynamic-container flex-grow overflow-y-auto scrollbar-thin  font-inter">
                     
                     <Routes>
-                        <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData}/>} />
+                        <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile}/>} />
                         <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData}/>} />
                         <Route exact path='/myfolders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData}/>} />
                         {/* <Route exact path='/recents' element={<RecentsPageComponent fileAndFolderData={fileAndFolderData}/>} />
@@ -135,9 +139,9 @@ const SidebarComponent = () => {
                         
                     </Routes>
                 </div>
-                <div className="profile-container lg: w-1/4 xl:w-1/5  flex flex-col justify-between font-inter flex-shrink-0">
+                {/* <div className="profile-container lg: w-1/4 xl:w-1/5  flex flex-col justify-between font-inter flex-shrink-0">
                     <ProfilebarComponent categorizedSizes = {categorizedSizes}/> 
-                </div>
+                </div> */}
 
             </div>
         
