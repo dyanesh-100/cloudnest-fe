@@ -3,24 +3,27 @@ import FileList from '../FileListComponent/FileListComponent';
 import FolderList from '../FolderListComponent/FolderListComponent'; 
 import SearchBar from '../SearchBarComponent/SearchBarComponent'; 
 
-const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onDownloadFile, onDeleteFile }) => {
-  const { folders, files = [] } = fileAndFolderData; // Ensure files is an array
+const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onDownloadFile, onDeleteFile,onDeleteFolder }) => {
+  const { folders, files = [] } = fileAndFolderData; 
   const [searchQuery, setSearchQuery] = useState('');
   
   
   const handleFileDeletion = (fileId) => {
-    onDeleteFile(fileId); // Call the passed down delete function
+    onDeleteFile(fileId); 
   };
-
+  
+  const handleFolderDeletion = (folderId) => {
+    onDeleteFolder(folderId); 
+  };
   const myFilesFilter = (file) => {
     return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
   };
   
 
-  console.log('File and Folder Data:', fileAndFolderData); // Debug log for data
+ 
 
   if (files.length === 0) {
-    return <p>No files available</p>; // Handling when there are no files
+    return <p>No files available</p>; 
   }
 
   return (
@@ -31,7 +34,7 @@ const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onD
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> 
 
           <p className='mt-16 mb-10 text-2xl font-semibold'>Suggested folders</p>
-          <FolderList folders={folders} searchQuery={searchQuery} /> 
+          <FolderList folders={folders} searchQuery={searchQuery} onDeleteFolder={handleFolderDeletion}/> 
 
           <p className='mt-10 mb-10 text-2xl font-semibold'>Suggested files</p>
           <FileList 

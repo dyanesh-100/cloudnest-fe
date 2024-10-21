@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import axiosInstance from '../../axiosInstance';
 import { FileUp } from 'lucide-react';
 
-const FileUploadComponent = ({ currentFolderId, onUploadSuccess }) => {
+const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
   
   const onDrop = useCallback((acceptedFiles) => {
     uploadFiles(acceptedFiles);
@@ -31,8 +31,8 @@ const FileUploadComponent = ({ currentFolderId, onUploadSuccess }) => {
       console.log('File uploaded successfully:', response.data);
 
       
-      if (typeof onUploadSuccess === 'function') {
-        onUploadSuccess(response.data.data);
+      if (typeof onUploadFile === 'function') {
+        onUploadFile(response.data.data);
         alert("File uploaded successfully") 
       } else {
         console.error('onUploadSuccess is not a function');

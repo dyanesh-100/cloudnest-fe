@@ -4,45 +4,32 @@ import FileList from '../FileListComponent/FileListComponent';
 import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
 
-const MyFilesComponent = () => {
-  const [fileData, setFileData] = useState([]);
+const MyFilesComponent = ({fileAndFolderData = { folders: [], files: [] }, onUploadFile,onDeleteFile}) => {
+  const { folders, files = [] } = fileAndFolderData; 
+  
   const [searchQuery, setSearchQuery] = useState('');
   
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axiosInstance.get('/files');
-        setFileData(response.data.data); 
-      } catch (error) {
-        console.error('Error fetching files:', error);
-        alert('Failed to load files. Please try again.');
-      }
-    };
-
-    fetchFiles();
-  }, []);
-
-  const handleUploadSuccess = (newFile) => {
-    setFileData((prevFiles) => [...prevFiles, newFile]);
+  const handleFileUpload = (fileId) => {
+    onUploadFile(fileId); 
   };
-  const handleDeleteFile = (fileId) => {
-    setFileData((prevFiles) => prevFiles.filter(file => file._id !== fileId));
+  const handleFileDeletion = (fileId) => {
+    onDeleteFile(fileId); 
   };
 
-  // Filter function for recently added files
+  
   const recentFilesFilter = (file) => {
     const today = new Date();
     const fileDate = new Date(file.createdAt);
     const daysDiff = Math.floor((today - fileDate) / (1000 * 60 * 60 * 24));
-    return daysDiff <= 7; // Show files added in the last week
+    return daysDiff <= 7; 
   };
 
-  // Filter function for all user files based on the search query
+  
   const myFilesFilter = (file) => {
     return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
   };
 
-  // Sort function to sort files by creation date
+  
   const sortFn = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
 
   return (
@@ -52,20 +39,22 @@ const MyFilesComponent = () => {
 
         <p className='mt-20 mb-10 text-2xl font-semibold'>Recently Added Files</p>
         <FileList
-          files={fileData}
+          files={files.filter(myFilesFilter)}
           filterFn={recentFilesFilter}
           sortFn={sortFn}
-          onDeleteFile={handleDeleteFile}
+          onDeleteFile={handleFileDeletion}
+          onUploadFile ={handleFileUpload}
         />
 
-        <FileUploadComponent currentFolderId={null} onUploadSuccess={handleUploadSuccess} />
+        <FileUploadComponent currentFolderId={null} onUploadFile ={handleFileUpload} />
 
         <p className='mt-20 mb-10 text-2xl font-semibold'>My Files</p>
         <FileList
-          files={fileData}
+          files={files.filter(myFilesFilter)}
           filterFn={myFilesFilter}
           sortFn={sortFn}
-          onDeleteFile={handleDeleteFile}
+          onDeleteFile={handleFileDeletion}
+          onUploadFile ={handleFileUpload}
         />
       </div>
     </div>

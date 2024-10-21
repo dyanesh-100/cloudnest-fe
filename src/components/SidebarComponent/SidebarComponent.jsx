@@ -5,6 +5,7 @@ import { LinearProgress } from '@mui/material';
 import { Clock, Cloud, Files, FolderClosed, House, Star } from 'lucide-react';
 import HomePageComponent from '../HomePageComponent/HomePageComponent';
 import MyFilesPageComponent from '../MyFilesPageComponent/MyFilesPageComponent';
+import FolderContentComponent from '../FolderContentComponent/FolderContentComponent'
 import MyFoldersPageComponent from '../MyFoldersPageComponent/MyFoldersPageComponent';
 import RecentsPageComponent from '../RecentsPageComponent/RecentsPageComponent';
 import FavouritesPageComponent from '../FavouritesPageComponent/FavouritesPageComponent';
@@ -36,7 +37,8 @@ const SidebarComponent = () => {
             try {
                     const responseFolders = await axiosInstance.get('/folders')
                     setFolderData(responseFolders.data.data)
-
+                
+                    
                     const responseFiles = await axiosInstance.post('/files');
                     setFileData(responseFiles.data.data);
                     setTotalUsedStorage(responseFiles.data.totalStorageUsed)
@@ -65,6 +67,16 @@ const SidebarComponent = () => {
     const handleDeleteFile = (fileId) => {
         setFileData((prevFiles) => prevFiles.filter(file => file._id !== fileId)); // Remove the deleted file from the list
     };
+    const handleDeleteFolder = (folderId) => {
+        setFolderData((prevFolders) => prevFolders.filter(folder => folder._id !== folderId)); // Remove the deleted file from the list
+    };
+
+    const handleFileUploadSuccess = (newFile) => {
+        setFileData((prevFiles) => [...prevFiles, newFile]);
+      };
+    const handleFolderCreationSuccess = (newFolder) => {
+        setFolderData((prevFolders) => [...prevFolders, newFolder]);
+      };
     
 
     return (
@@ -91,15 +103,15 @@ const SidebarComponent = () => {
                                 <Files />
                                 <p>My Files</p>
                             </Link>
-                            <Link to='/cloudnest/myfolders' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                            <Link to='/cloudnest/folders' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                                 <FolderClosed />
                                 <p>My Folders</p>
                             </Link>
                             {/* <Link to='/cloudnest/recents' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                                 <Clock />
                                 <p>Recents</p>
-                            </Link>
-                            <Link to='/cloudnest/favourites' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                            </Link> */}
+                            {/* <Link to='/cloudnest/favourites' className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                                 <Star />
                                 <p>Favourites</p>
                             </Link> */}
@@ -131,11 +143,12 @@ const SidebarComponent = () => {
                 <div className="dynamic-container flex-grow overflow-y-auto scrollbar-thin  font-inter">
                     
                     <Routes>
-                        <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile}/>} />
-                        <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData}/>} />
-                        <Route exact path='/myfolders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData}/>} />
-                        {/* <Route exact path='/recents' element={<RecentsPageComponent fileAndFolderData={fileAndFolderData}/>} />
-                        <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData}/>} /> */}
+                        <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder}/>} />
+                        <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess}/>} />
+                        <Route exact path='/folders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData} onDeleteFolder={handleDeleteFolder}/>} />
+                        <Route exact path='/folders/:folderId' element={<FolderContentComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} onCreateFolder={handleFolderCreationSuccess}/>}/>
+                        {/* <Route exact path='/recents' element={<RecentsPageComponent fileAndFolderData={fileAndFolderData}/>} /> */}
+                        {/* <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData}/>} /> */}
                         
                     </Routes>
                 </div>

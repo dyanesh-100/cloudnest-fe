@@ -57,7 +57,7 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
     <div className='flex flex-wrap gap-9 pb-10 w-full'>
       {sortedFiles.length > 0 ? (
         sortedFiles.map(file => (
-          <div className='bg-paleBlue w-72 py-3 px-5 rounded-xl relative' key={file._id}>
+          <div className='bg-paleBlue w-64 py-3 px-5 rounded-xl relative' key={file._id}>
             <div className='flex items-center leading-none text-black'>
               <img src={getFileIcon(file.fileFormat)} alt="" className='w-6' />
               <div className='flex justify-between w-full'>
@@ -71,7 +71,16 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
             <div className='bg-white flex justify-center px-10 py-16 rounded-l my-5'>
               <img className='w-14' src={getFileIcon(file.fileFormat)} alt="" />
             </div>
-            <p className='text-xs'>{new Date(file.createdAt).toLocaleString()}</p>
+            <p className='text-xs'>
+              {new Date(file.createdAt).toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'short',  
+                day: '2-digit',   
+                hour: '2-digit',  
+                minute: '2-digit',
+                hour12: true     
+              })}
+            </p>
 
             {showOptions === file._id && (
               <div
