@@ -1,0 +1,94 @@
+/* Sidebar container and transition */
+.sidebar-container {
+    transition: transform 0.3s ease;
+    z-index: 50;
+}
+
+/* Overlay for when sidebar is open on smaller screens */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 40; /* Under the sidebar but above dynamic content */
+}
+
+/* Dynamic container for main content */
+.dynamic-container {
+    transition: opacity 0.3s ease;
+    width: 100%; /* Full width when sidebar is closed */
+}
+
+/* Full-screen width for dynamic content */
+.full-screen {
+    width: 100%;
+}
+
+/* Hamburger button styling */
+.hamburger-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100; /* Higher z-index for button */
+}
+
+.hamburger-icon {
+    width: 30px;
+    height: 2px;
+    background: black;
+    transition: all 0.3s ease;
+}
+
+/* Open state of hamburger icon */
+.hamburger-icon.open {
+    transform: rotate(45deg);
+}
+
+/* Menu link styling */
+.menu-link {
+    display: flex;
+    gap: 2;
+    align-items: center;
+    margin-top: 6;
+    padding: 1.5;
+    transition: background 0.3s ease;
+}
+
+.menu-link:hover {
+    background: lightgrey;
+}
+
+/* Scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    .sidebar-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 60%; /* Sidebar takes two-thirds of the screen width */
+        height: 100vh;
+        z-index: 50; /* Ensure it stays above content */
+    }
+
+    .dynamic-container {
+        opacity: 1;
+    }
+}
+
+
+

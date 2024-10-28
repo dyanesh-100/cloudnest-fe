@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import logo from '../../assets/images/logo3.png';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Paper, Box } from '@mui/material';
+import {  toast } from 'react-toastify'; 
 import axiosInstance from '../../axiosInstance';
 
 const SignUpComponent = () => {
@@ -10,6 +11,7 @@ const SignUpComponent = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate()
 
     const firstNameHandler = (event) => setFirstName(event.target.value);
     const lastNameHandler = (event) => setLastName(event.target.value);
@@ -21,18 +23,26 @@ const SignUpComponent = () => {
 
         axiosInstance.post(`/signup`, { firstName, lastName, email, password })
             .then((response) => {
-                alert(`Successfully created account for ${response.data.firstName} ${response.data.lastName}`);
-                window.location.href = '/';
+                toast.success(`Successfully created account for ${response.data.firstName} ${response.data.lastName}`);
+                navigate('/cloudnest/home');
             })
             .catch((error) => {
-                alert(`Status : ${error.response.status} - ${error.response.data.message}`);
+                if (error.response) {
+                    toast.error(`Status: ${error.response.status} - ${error.response.data.message}`);
+                } else if (error.request) {
+                    
+                    toast.error('No response from server. Please try again later.');
+                } else {
+                   
+                    toast.error(`Error: ${error.message}`);
+                }
             });
     };
 
     return (
         <Container maxWidth="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             <Paper elevation={3} style={{ padding: '40px', width: '100%' }}>
-                {/* Logo and Brand Name */}
+               
                 <Box display="flex" alignItems="center" justifyContent="center" marginBottom={4}>
                     <img src={logo} alt="Brand Logo" style={{ width: '80px', height: '80px', marginRight: '15px', borderRadius: '10%' }} />
                     <Typography variant="h4" style={{ fontWeight: 'bold', color: '#333' }}>

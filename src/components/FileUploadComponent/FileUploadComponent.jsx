@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axiosInstance from '../../axiosInstance';
 import { FileUp } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
   
@@ -15,12 +17,12 @@ const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
   const uploadFiles = async (acceptedFiles) => {
     const formData = new FormData();
     
-    
     acceptedFiles.forEach((file) => {
       formData.append('file', file);
     });
 
     console.log('Uploading files:', acceptedFiles);
+    const toastId = toast.loading("File uploading");
 
     try {
       const parentId = currentFolderId || ''; 
@@ -33,38 +35,50 @@ const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
       
       if (typeof onUploadFile === 'function') {
         onUploadFile(response.data.data);
-        alert("File uploaded successfully") 
+        toast.update(toastId, { 
+          render: "File uploaded successfully!", 
+          type: "success", 
+          isLoading: false, 
+          autoClose: 3000 // auto close after 3 seconds
+        }); 
       } else {
         console.error('onUploadSuccess is not a function');
       }
     } catch (error) {
       console.error('Error uploading files:', error);
+      toast.update(toastId, { 
+        render: "Error uploading files", 
+        type: "error", 
+        isLoading: false, 
+        autoClose: 3000 // auto close after 3 seconds
+      });
     }
   };
 
   return (
     
     <React.Fragment>
-        <p className='mt-10 text-2xl font-semibold'>Upload Files</p>
-            <div className='flex mt-10 text-2xl font-semibold'>
+      
+        
+            <div className='flex mt-10 '>
             
             <div
-        {...getRootProps()} 
-        className={`border-2 border-dashed border-lightBlue p-6 py-16 rounded-lg cursor-pointer w-full flex justify-center flex-col items-center ${
-            isDragActive ? 'bg-gray-200' : 'bg-gray-100'
-        }`}
-        >
-            <div className='bg-lightBlue rounded-full p-2 text-black mb-5'>
-                <FileUp />
+                {...getRootProps()} 
+                className={`border-2 border-dashed border-lightBlue p-6 py-16 rounded-lg cursor-pointer w-full flex justify-center flex-col items-center ${
+                    isDragActive ? 'bg-gray-200' : 'bg-gray-100'
+                }`}
+                >
+                    <div className='bg-lightBlue rounded-full p-2 text-black mb-5'>
+                        <FileUp />
+                    </div>
+                    
+                <input {...getInputProps()} /> 
+                {isDragActive ? (
+                    <p>Drop the files here...</p>
+                ) : (
+                    <p>Drag and drop files here, or Browse</p>
+                )}
             </div>
-            
-        <input {...getInputProps()} /> 
-        {isDragActive ? (
-            <p>Drop the files here...</p>
-        ) : (
-            <p>Drag and drop files here, or Browse</p>
-        )}
-        </div>
         </div>
     </React.Fragment>
     

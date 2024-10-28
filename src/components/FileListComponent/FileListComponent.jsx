@@ -1,36 +1,68 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EllipsisVertical } from 'lucide-react';
 import { getFileIcon, downloadFileToLocal } from '../../utils/utils';
+import EmptyFavFiles from '../../assets/images/EmptyFavFiles.webp'
+import { ToastContainer, toast } from 'react-toastify'; 
+// import { toast, } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure toastify CSS is included
 import axiosInstance from '../../axiosInstance';
 
-const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
+const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOpenedDate }) => {
+ 
   const [searchQuery, setSearchQuery] = useState('');
-  const [showOptions, setShowOptions] = useState(null);
+  const [showOptions, setShowOptions] = useState(null); 
   const dropdownRef = useRef(null);
 
+  
   const handleToggleOptions = (fileId) => {
     setShowOptions(prev => (prev === fileId ? null : fileId));
   };
 
+ 
   const handleDownloadFile = async (fileId) => {
     try {
       await downloadFileToLocal(fileId);
+      toast.success('File downloaded successfully', { autoClose: 3000 });
     } catch (error) {
       console.error('Error downloading the file:', error);
+      toast.error('Failed to download file');
     }
   };
+  const handleFavouriteToggle = async (fileId) => {
+    try {
+      const response = await axiosInstance.patch(`/favourite/${fileId}`);
+      toast.success(response.data.message, { autoClose: 3000 });
+  
+      
+      setFileData(prevFiles =>
+        prevFiles.map(file =>
+          file._id === fileId ? { ...file, isFavourite: !file.isFavourite } : file
+        )
+      );
+    } catch (error) {
+      console.error('Error toggling favourite status:', error);
+      toast.error('Failed to toggle favourite status. Please try again.');
+    }
+  };
+  
+
 
   const handleDeleteFile = async (fileId) => {
     try {
       await axiosInstance.delete(`/files/${fileId}`);
-      alert('File deleted successfully');
-      onDeleteFile(fileId);
+      toast.success('File deleted successfully', { autoClose: 3000 });
+      onDeleteFile(fileId); 
+      
+      if (showOptions === fileId) {
+        setShowOptions(null);
+      }
     } catch (error) {
       console.error('Error deleting file:', error);
-      alert('Failed to delete file. Please try again.');
+      toast.error('Failed to delete file. Please try again.');
     }
   };
 
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -40,8 +72,6 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
 
     if (showOptions !== null) {
       document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
@@ -49,39 +79,55 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
     };
   }, [showOptions]);
 
-  const filteredFiles = files.filter(file => 
+ 
+  const filteredFiles = files.filter(file =>
     file && file.fileName && file.fileName.toLowerCase().includes(searchQuery.toLowerCase())
-  );  const sortedFiles = filteredFiles.sort(sortFn);
+  );
+  const sortedFiles = filteredFiles.sort(sortFn);
 
   return (
-    <div className='flex flex-wrap gap-9 pb-10 w-full'>
+    <div className='flex flex-wrap gap-4 w-full lg:gap-6 xl:gap-7 '>
       {sortedFiles.length > 0 ? (
         sortedFiles.map(file => (
-          <div className='bg-paleBlue w-64 py-3 px-5 rounded-xl relative' key={file._id}>
+          <div className='bg-paleBlue w-full sm:w-64 py-3 px-5 rounded-xl relative xl:w-56 2xl:w-64' key={file._id}>
             <div className='flex items-center leading-none text-black'>
-              <img src={getFileIcon(file.fileFormat)} alt="" className='w-6' />
+              <img src={getFileIcon(file.fileFormat)} alt="" className='size-6' />
               <div className='flex justify-between w-full'>
-                <p className='text-sm pl-3 truncate max-w-[150px]'>{file.fileName}</p>
+                <div>
+                  <p className='text-sm pl-3 truncate sm:max-w-[140px]'>{file.fileName}</p>
+                  <p className='text-xs pl-3 sm:hidden'>
+                    {new Date(showLastOpenedDate ? file.lastOpenedAt : file.createdAt).toLocaleString(undefined, {
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </p>
+                </div>
+                
                 <EllipsisVertical
-                  className='cursor-pointer'
+                  className=''
                   onClick={() => handleToggleOptions(file._id)}
                 />
               </div>
             </div>
-            <div className='bg-white flex justify-center px-10 py-16 rounded-l my-5'>
-              <img className='w-14' src={getFileIcon(file.fileFormat)} alt="" />
+            <div className='hidden sm:bg-white sm:flex sm:justify-center sm:px-10 sm:py-16 sm:rounded-l sm:my-5'>
+              <img className='sm:w-14' src={getFileIcon(file.fileFormat)} alt="" />
             </div>
-            <p className='text-xs'>
-              {new Date(file.createdAt).toLocaleString(undefined, {
+            <p className='hidden sm:text-xs'>
+              {new Date(showLastOpenedDate ? file.lastOpenedAt : file.createdAt).toLocaleString(undefined, {
                 year: 'numeric',
-                month: 'short',  
-                day: '2-digit',   
-                hour: '2-digit',  
+                month: 'short',
+                day: '2-digit',
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: true     
+                hour12: true
               })}
             </p>
 
+           
             {showOptions === file._id && (
               <div
                 ref={dropdownRef}
@@ -95,6 +141,12 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
                   Download
                 </button>
                 <button
+                  onClick={() => handleFavouriteToggle(file._id)}
+                  className="block w-full text-left px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100 rounded"
+                >
+                    {file.isFavourite ? 'Unfavourite' : 'Favourite'}
+                </button>
+                <button
                   onClick={() => handleDeleteFile(file._id)}
                   className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 rounded"
                 >
@@ -105,8 +157,12 @@ const FileList = ({ files, filterFn, sortFn,onDeleteFile }) => {
           </div>
         ))
       ) : (
-        <p>No files found</p>
+        <p>
+          hello
+        </p>
       )}
+
+      
     </div>
   );
 };

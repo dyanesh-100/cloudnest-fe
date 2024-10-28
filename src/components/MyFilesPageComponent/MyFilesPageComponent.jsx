@@ -1,62 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../axiosInstance';
+import React, { useState } from 'react';
 import FileList from '../FileListComponent/FileListComponent';
 import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
+import { toast } from 'react-toastify';
+import noFiles from '../../assets/images/No-Files-Folders.webp';
+import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 
-const MyFilesComponent = ({fileAndFolderData = { folders: [], files: [] }, onUploadFile,onDeleteFile}) => {
-  const { folders, files = [] } = fileAndFolderData; 
-  
+const MyFilesComponent = ({
+  fileAndFolderData = { folders: [], files: [] },
+  onUploadFile,
+  onDeleteFile,
+  setFileData,
+  onCreateFolder
+}) => {
+  const { files = [] } = fileAndFolderData;
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const handleFileUpload = (fileId) => {
-    onUploadFile(fileId); 
-  };
-  const handleFileDeletion = (fileId) => {
-    onDeleteFile(fileId); 
+    onUploadFile(fileId);
   };
 
+  const handleFileDeletion = (fileId) => {
+    onDeleteFile(fileId);
+  };
   
-  const recentFilesFilter = (file) => {
+  const handleFolderCreation = (folderId) => {
+    onCreateFolder(folderId); 
+  };
+
+  const recentlyAddedFilesFilter = (file) => {
     const today = new Date();
     const fileDate = new Date(file.createdAt);
     const daysDiff = Math.floor((today - fileDate) / (1000 * 60 * 60 * 24));
-    return daysDiff <= 7; 
+    return daysDiff <= 7;
   };
 
-  
   const myFilesFilter = (file) => {
     return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
   };
 
-  
   const sortFn = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
 
   return (
-    <div className='bg-white h-screen flex'>
-      <div className='px-8 py-16 w-full'>
+    <div className='bg-white h-screen flex flex-col items-center px-16 pt-16'>
+      <div className='w-full '>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-        <p className='mt-20 mb-10 text-2xl font-semibold'>Recently Added Files</p>
-        <FileList
-          files={files.filter(myFilesFilter)}
-          filterFn={recentFilesFilter}
-          sortFn={sortFn}
-          onDeleteFile={handleFileDeletion}
-          onUploadFile ={handleFileUpload}
-        />
-
-        <FileUploadComponent currentFolderId={null} onUploadFile ={handleFileUpload} />
-
-        <p className='mt-20 mb-10 text-2xl font-semibold'>My Files</p>
-        <FileList
-          files={files.filter(myFilesFilter)}
-          filterFn={myFilesFilter}
-          sortFn={sortFn}
-          onDeleteFile={handleFileDeletion}
-          onUploadFile ={handleFileUpload}
-        />
       </div>
+
+      {files.length === 0 ? (
+        <div className='flex flex-col items-center justify-center w-full mt-20'>
+          <img src={noFiles} alt='No files uploaded' className='w-96 mb-6' />
+          <p className='text-xl font-semibold text-gray-600'>No files uploaded yet!</p>
+          <p className='text-gray-500 mt-2'>Start uploading to organize your cloud storage.</p>
+          <div className='mt-8 text-lg font-semibold'>
+            <NewButtonComponent onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload}/>
+          </div>
+        </div>
+      ) : (
+        <div className='w-full'>
+          {!searchQuery && (
+            <div>
+              <p className='mt-20 mb-10 text-2xl font-semibold'>Recently Added Files</p>
+              <FileList
+                files={files.filter(recentlyAddedFilesFilter)}
+                sortFn={sortFn}
+                onDeleteFile={handleFileDeletion}
+                onUploadFile={handleFileUpload}
+                setFileData={setFileData}
+              />
+              <p className='mt-20 text-2xl font-semibold'>Upload Files</p>
+              <FileUploadComponent currentFolderId={null} onUploadFile={handleFileUpload} />
+            </div>
+          )}
+
+          <p className='mt-20 mb-10 text-2xl font-semibold'>My Files</p>
+          <div className='pb-16'>
+            <FileList
+              files={files.filter(myFilesFilter)}
+              sortFn={sortFn}
+              onDeleteFile={handleFileDeletion}
+              onUploadFile={handleFileUpload}
+              setFileData={setFileData}
+            />
+          </div>
+          
+        </div>
+      )}
     </div>
   );
 };

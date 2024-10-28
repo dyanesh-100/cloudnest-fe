@@ -4,6 +4,7 @@ import { faFolder } from '@fortawesome/free-solid-svg-icons';
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
+import { toast } from 'react-toastify';
 
 const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
   const [showOptions, setShowOptions] = useState(null);
@@ -18,11 +19,11 @@ const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
   const handleDeleteFolder = async (folderId) => {
     try {
       await axiosInstance.delete(`/folders/${folderId}`);
-      alert('Folder deleted successfully');
+      toast.success('Folder deleted successfully', { autoClose: 3000 });
       onDeleteFolder(folderId); // Pass the deleted folder ID back to the parent
     } catch (error) {
       console.error('Error deleting folder:', error);
-      alert('Failed to delete folder. Please try again.');
+      toast.error('Failed to delete folder. Please try again.');
     }
   };
 
@@ -53,7 +54,7 @@ const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
         folders
           .filter((folder) => folder.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
           .map((folder) => (
-            <div className='bg-paleBlue w-64 py-3 px-5 rounded-xl relative' key={folder._id}>
+            <div className='bg-paleBlue w-full sm:w-64 py-3 px-5 rounded-xl relative' key={folder._id}>
               
               <Link to={`/cloudnest/folders/${folder._id}`} className='flex items-center'>
                 <FontAwesomeIcon icon={faFolder} className='text-black size-6' />

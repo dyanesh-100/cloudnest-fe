@@ -4,10 +4,11 @@ import FolderList from '../FolderListComponent/FolderListComponent';
 import FileListComponent from '../FileListComponent/FileListComponent';
 import CreateFolderForm from '../CreateFolderForm/CreateFolderForm';
 import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
+import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 
-const FolderContentComponent = ({fileAndFolderData = { folders: [], files: [] }, onUploadFile,onDeleteFile,onDeleteFolder,onCreateFolder}) => {
+const FolderContentComponent = ({fileAndFolderData = { folders: [], files: [] }, onUploadFile,onDeleteFile,onDeleteFolder,onCreateFolder,setFileData}) => {
   
-  const { folderId } = useParams(); // Get folder ID from URL
+  const { folderId } = useParams(); 
   const [currentFolder, setCurrentFolder] = useState(null);
   const [subFolders, setSubFolders] = useState([]);
   const [currentFiles, setCurrentFiles] = useState(null)
@@ -65,17 +66,20 @@ const FolderContentComponent = ({fileAndFolderData = { folders: [], files: [] },
       {currentFolder ? (
         <div>
           <h2 className='text-xl font-medium '>{renderPath()}</h2>
-          <div className='mt-24'>
-            <CreateFolderForm parentId={folderId} onCreateFolder={handleFolderCreation} />
+          <div className='relative mt-20'>
+            <NewButtonComponent parentId={folderId} onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload}/>
           </div>
 
           <h3 className='text-xl font-medium mt-8 mb-4'>Subfolders</h3>
           <FolderList folders={subFolders} searchQuery="" onFolderClick={handleFolderClick} onDeleteFolder={handleFolderDeletion} onCreateFolder={handleFolderCreation}/> 
 
           <h3 className='text-xl font-medium mt-8 mb-4'>Files</h3>
-          <FileListComponent files={currentFiles} onFolderClick={handleFolderClick} onDeleteFile={handleFileDeletion}/> 
-
-          <FileUploadComponent currentFolderId={folderId} onUploadFile ={handleFileUpload}  />
+          <FileListComponent 
+            files={currentFiles} 
+            onFolderClick={handleFolderClick} 
+            onDeleteFile={handleFileDeletion}
+            setFileData = {setFileData}
+            /> 
         </div>
       ) : (
         <p>Loading folder content...</p>

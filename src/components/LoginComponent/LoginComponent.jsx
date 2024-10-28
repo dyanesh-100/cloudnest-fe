@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import logo from '../../assets/images/logo3.png'; 
 import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Paper, Box } from '@mui/material';
+import {  toast } from 'react-toastify'; 
 import axiosInstance from '../../axiosInstance';
 
 const LoginComponent = () => {
@@ -24,13 +25,22 @@ const LoginComponent = () => {
             })
             .then((response) => {
                 if (response.status === 201) {
-                    alert(`Welcome ${response.data.firstName} ${response.data.lastName}`);
+                    toast.success(`Welcome ${response.data.firstName} ${response.data.lastName}`);
                     window.localStorage.setItem('token', response.data.token);
                     navigate('/cloudnest/home');
                 }
             })
             .catch((error) => {
-                alert(`Status : ${error.response.data.status} - ${error.response.data.message}`);
+                if (error.response) {
+                    
+                    toast.error(`Status : ${error.response.status} - ${error.response.data.message}`);
+                } else if (error.request) {
+                    
+                    toast.error('No response from server. Please try again later.');
+                } else {
+                    
+                    toast.error(`Error: ${error.message}`);
+                }
             });
     };
 
