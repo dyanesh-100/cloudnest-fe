@@ -24,6 +24,7 @@ const SignUpComponent = () => {
         axiosInstance.post(`/signup`, { firstName, lastName, email, password })
             .then((response) => {
                 toast.success(`Successfully created account for ${response.data.firstName} ${response.data.lastName}`);
+                window.localStorage.setItem('token', response.data.token);
                 navigate('/cloudnest/home');
             })
             .catch((error) => {

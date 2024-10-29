@@ -47,7 +47,7 @@ const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
   }, [showOptions]);
 
   return (
-    <div className='flex flex-wrap gap-9'>
+    <div className='flex flex-wrap gap-4 w-full lg:gap-6 xl:gap-7 '>
       {folders
         .filter((folder) => folder.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
         .length > 0 ? (

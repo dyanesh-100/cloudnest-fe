@@ -1,84 +1,102 @@
-import React, { useEffect, useState } from 'react';
-
-import doc from '../../assets/images/default-cover.png';
-import image from '../../assets/images/image-logo.webp';
-import video from '../../assets/images/video-logo.png';
-import audio from '../../assets/images/audio-logo.jpg';
-import { bytesToGB } from '../../utils/utils';
-import { Ellipsis } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
+import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 
-const ProfilebarComponent = ({ categorizedSizes = {} }) => {
-    const { documentSize, imageSize, videoSize, audioSize } = categorizedSizes;
-
+const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
     const [user, setUser] = useState(null); 
+    const [dropdownOpen, setDropdownOpen] = useState(false); 
+    const dropdownRef = useRef(null); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await axiosInstance.get('/userdata'); 
-                setUser(response.data); 
-                
+                setUser(response.data);
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching user:', error.response ? error.response.data : error.message);
             }
         };
-
         fetchUser();
     }, []);
 
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+                enableScrolling(); // Re-enable scrolling
+            }
+        };
+        
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            disableScrolling();
+        } else {
+            enableScrolling();
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            enableScrolling();
+        };
+    }, [dropdownOpen]);
+
+    const disableScrolling = () => {
+        document.body.style.overflow = 'hidden';
+    };
+
+    const enableScrolling = () => {
+        document.body.style.overflow = '';
+    };
+
+    const signout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    };
+
+    const handleFileUpload = (fileId) => {
+        onUploadFile(fileId);
+    };
+
+    const handleFolderCreation = (folderId) => {
+        onCreateFolder(folderId); 
+    };
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
+
     return (
-        <React.Fragment>
-            <div className='bg-white h-full flex'>
-                <div className="border-l border-lightGrey h-screen"></div>
-                <div className='py-16 px-8 w-full'>
-                    <div>
-                        
-                        {user ? (
-                            <div className='flex items-center'>
-                                <img src={DP} alt="Profile" className='rounded-full w-12' />
-                                <div className='pl-2 w-full flex justify-between'>
-                                    <p className=' xl:text-xl font-medium'>{`${user.firstName} ${user.lastName}`}</p>
-                                    <Ellipsis />
-                                </div>
-                            </div>
-                        ) : (
-                            <p className='text-center'>No user found.</p> 
-                        )}
-                    </div>
+        <div className='flex gap-5 items-center relative'>
+            <div className='hidden sm:block sm:text-base sm:font-semibold'>
+                <NewButtonComponent onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload} />
+            </div>
 
-                    <div className='mt-10'>
-                        <p className='text-xl font-medium mb-5'>File type</p>
-                        <div className="flex flex-wrap justify-center w-full max-w-md mx-auto">
-                            <div className="flex flex-col items-center justify-center w-1/2 p-6 border-b border-r border-gray-200">
-                                <img src={doc} alt="Document" className="w-12 h-12" />
-                                <p className="text-gray-700 text-base mt-2">Document</p>
-                                <p className="text-gray-500 text-sm">{bytesToGB(documentSize)} GB</p>
-                            </div>
+            
+            <div onClick={toggleDropdown} className='flex text-xl items-center justify-center size-12  hover:border-lightGrey hover:border-lightGrey bg-blue-500 text-white rounded-full cursor-pointer border-4 border-paleBlue'>
+                {user ? user.firstName[0].toUpperCase() : 'U'}
+            </div>
 
-                            <div className="flex flex-col items-center justify-center w-1/2 p-6 border-b border-gray-200">
-                                <img src={video} alt="Video" className="w-12 h-12" />
-                                <p className="text-gray-700 text-base mt-2">Video</p>
-                                <p className="text-gray-500 text-sm">{bytesToGB(videoSize)} GB</p>
-                            </div>
-
-                            <div className="flex flex-col items-center justify-center w-1/2 p-6 border-r border-gray-200">
-                                <img src={audio} alt="Audio" className="w-12 h-12" />
-                                <p className="text-gray-700 text-base mt-2">Audio</p>
-                                <p className="text-gray-500 text-sm">{bytesToGB(audioSize)} GB</p>
-                            </div>
-
-                            <div className="flex flex-col items-center justify-center w-1/2 p-6">
-                                <img src={image} alt="Image" className="w-12 h-12" />
-                                <p className="text-gray-700 text-base mt-2">Image</p>
-                                <p className="text-gray-500 text-sm">{bytesToGB(imageSize)} GB</p>
-                            </div>
+            
+            {dropdownOpen && (
+                <div ref={dropdownRef} className=' absolute top-12 mt-5 right-0 bg-paleBlue shadow-lg rounded-3xl px-20 py-6'>
+                    <p className='text-lg'>{user.email}</p>
+                    <div className='flex justify-center my-5'>
+                        <div className='flex items-center justify-center size-20 text-3xl bg-blue-500 text-white rounded-full '>
+                            {user ? user.firstName[0].toUpperCase() : 'U'}
                         </div>
                     </div>
+                    <p className='text-xl text-center mb-5'>Hii, {user.firstName} !!</p>
+                    <div className='bg-lightBlue p-3 rounded-3xl text-center'>
+                        <button onClick={signout} className='text-white hover:text-red-950'>Sign Out</button>
+                    </div>
                 </div>
-            </div>
-        </React.Fragment>
+            )}
+        </div>
     );
-}
+};
 
 export default ProfilebarComponent;

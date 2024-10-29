@@ -5,6 +5,7 @@ import FileUploadComponent from '../FileUploadComponent/FileUploadComponent';
 import { toast } from 'react-toastify';
 import noFiles from '../../assets/images/No-Files-Folders.webp';
 import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
+import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
 const MyFilesComponent = ({
   fileAndFolderData = { folders: [], files: [] },
@@ -42,9 +43,14 @@ const MyFilesComponent = ({
   const sortFn = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
 
   return (
-    <div className='bg-white h-screen flex flex-col items-center px-16 pt-16'>
-      <div className='w-full '>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <div className='bg-white h-screen flex flex-col items-center px-8 pt-16'>
+      <div className='flex items-center w-full justify-between'>
+        <div className='w-10/12'>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </div>
+        <div>
+          <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+        </div>
       </div>
 
       {files.length === 0 ? (

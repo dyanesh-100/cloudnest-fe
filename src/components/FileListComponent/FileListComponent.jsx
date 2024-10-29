@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Make sure toastify CSS is included
 import axiosInstance from '../../axiosInstance';
 
-const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOpenedDate }) => {
+const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOpenedDate,onDownloadUpdate }) => {
  
   const [searchQuery, setSearchQuery] = useState('');
   const [showOptions, setShowOptions] = useState(null); 
@@ -23,6 +23,7 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
     try {
       await downloadFileToLocal(fileId);
       toast.success('File downloaded successfully', { autoClose: 3000 });
+      onDownloadUpdate(fileId);
     } catch (error) {
       console.error('Error downloading the file:', error);
       toast.error('Failed to download file');
@@ -116,7 +117,7 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
             <div className='hidden sm:bg-white sm:flex sm:justify-center sm:px-10 sm:py-16 sm:rounded-l sm:my-5'>
               <img className='sm:w-14' src={getFileIcon(file.fileFormat)} alt="" />
             </div>
-            <p className='hidden sm:text-xs'>
+            <p className=' sm:text-xs'>
               {new Date(showLastOpenedDate ? file.lastOpenedAt : file.createdAt).toLocaleString(undefined, {
                 year: 'numeric',
                 month: 'short',

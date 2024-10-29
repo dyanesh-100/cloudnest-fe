@@ -4,8 +4,9 @@ import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import axiosInstance from '../../axiosInstance';
 import EmptyFavFiles from '../../assets/images/EmptyFavFiles.webp'
 import { toast } from 'react-toastify';
+import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
-const FavouritesPageComponent = ({ onDeleteFile, setFileData }) => {
+const FavouritesPageComponent = ({ onDeleteFile, setFileData,onUploadFile,onCreateFolder }) => {
   const [favouriteFiles, setFavouriteFiles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);  
@@ -34,9 +35,16 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData }) => {
     fetchFavouriteFiles();
   }, []);
 
+  const handleFileUpload = (fileId) => {
+    onUploadFile(fileId);
+  };
+
   const handleFileDeletion = (fileId) => {
     onDeleteFile(fileId);
-    setFavouriteFiles(prevFiles => prevFiles.filter(file => file._id !== fileId));
+  };
+
+  const handleFolderCreation = (folderId) => {
+    onCreateFolder(folderId);
   };
 
   const myFilesFilter = (file) => {
@@ -46,7 +54,14 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData }) => {
   return (
     <React.Fragment>
       <div className="px-8 py-16">
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className='flex items-center w-full justify-between'>
+          <div className='w-10/12'>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </div>
+          <div>
+            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+          </div>
+        </div>
 
         {loading ? (
           <p>Loading favourite files...</p>
@@ -56,12 +71,19 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData }) => {
             <p className="text-gray-500">Please try reloading the page or check back later.</p>
           </div>
         ) : favouriteFiles.length > 0 ? (
-          <FileList
-            files={favouriteFiles.filter(myFilesFilter)} 
-            searchQuery={searchQuery}
-            onDeleteFile={handleFileDeletion}
-            setFileData={setFileData}
-          />
+
+          <div className='mt-20'>
+            <div>
+              <p className='text-2xl mb-10 font-medium'>Favourites</p>
+            </div>
+            <FileList
+              files={favouriteFiles.filter(myFilesFilter)} 
+              searchQuery={searchQuery}
+              onDeleteFile={handleFileDeletion}
+              setFileData={setFileData}
+            />
+          </div>
+          
         ) : (
           <div className="flex flex-col items-center h-[60vh] text-center mt-20">
             <img 

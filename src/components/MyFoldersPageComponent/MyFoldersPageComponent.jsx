@@ -4,6 +4,7 @@ import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 import { toast } from 'react-toastify';
 import noFolders from '../../assets/images/folder-empty.webp'; // Ensure the image path is correct
+import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
 const MyFolderPageComponent = ({ fileAndFolderData = { files: [], folders: [] }, onDeleteFolder, onCreateFolder, onUploadFile }) => {
   const { folders = [] } = fileAndFolderData;
@@ -26,7 +27,14 @@ const MyFolderPageComponent = ({ fileAndFolderData = { files: [], folders: [] },
   return (
     <div className='bg-white h-screen flex'>
       <div className='px-8 py-16 w-full'>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className='flex items-center w-full justify-between'>
+          <div className='w-10/12'>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </div>
+          <div>
+            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+          </div>
+        </div>
         {folders.length === 0 ? (
           
           <div className='flex flex-col items-center justify-center mt-15'>

@@ -10,10 +10,11 @@ import FolderContentComponent from '../FolderContentComponent/FolderContentCompo
 import MyFoldersPageComponent from '../MyFoldersPageComponent/MyFoldersPageComponent';
 import RecentPageComponent from '../RecentPageComponent/RecentPageComponent';
 import FavouritesPageComponent from '../FavouritesPageComponent/FavouritesPageComponent';
-import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
+
 import './SidebarComponent.css'
 import {bytesToGB} from '../../utils/utils';
 import axiosInstance from '../../axiosInstance';
+import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
 const SidebarComponent = () => {
     const [totalUsedStorage, setTotalUsedStorage] = useState(0);
@@ -39,7 +40,6 @@ const SidebarComponent = () => {
     
         window.addEventListener('resize', handleResize);
         
-        // Cleanup the event listener
         return () => {
           window.removeEventListener('resize', handleResize);
         };
@@ -115,7 +115,7 @@ const SidebarComponent = () => {
     };
 
     const handleDeleteFolder = (folderId) => {
-        setFolderData((prevFolders) => prevFolders.filter(folder => folder._id !== folderId)); // Remove the deleted file from the list
+        setFolderData((prevFolders) => prevFolders.filter(folder => folder._id !== folderId)); 
     };
 
 
@@ -125,13 +125,25 @@ const SidebarComponent = () => {
 return (
     <div className="flex h-screen relative">
         {screenWidth < 768 && (
-            <button
-                className="hamburger-button fixed top-4 left-4 z-50"
-                onClick={handleSidebarToggle}
-            >
-                <Menu/>
-                <span className={`hamburger-icon ${isSidebarOpen ? 'open' : ''}`}></span>
-            </button>
+            <div className='fixed flex w-full justify-between px-5 py-5 items-center'>
+                <button
+                    className="hamburger-button  top-4 left-4 z-50"
+                    onClick={handleSidebarToggle}
+                >
+                    <Menu/>
+                    <span className={`hamburger-icon ${isSidebarOpen ? 'open' : ''}`}></span>
+                </button>
+                <Link to='/' className='flex gap-3 items-center sm:hidden'>
+                        <img src={logo} alt="" className='rounded-full size-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
+                        <div className=''>
+                            <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>
+                        </div>
+                    </Link>
+                <div>
+                    <ProfilebarComponent onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} />
+                </div>
+            </div>
+            
         )}
         {(isSidebarOpen || screenWidth >= 768) && (
             <div
@@ -197,12 +209,12 @@ return (
         <div className="border-l border-lightGrey h-screen"></div>
         <div className="dynamic-container flex-grow overflow-y-auto scrollbar-thin font-inter">
             <Routes>
-                <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} setFileData={setFileData} onCreateFolder={handleFolderCreationSuccess}/>} />
+                <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} setFileData={setFileData} onCreateFolder={handleFolderCreationSuccess} onUploadFile={handleFileUploadSuccess}/>} />
                 <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
                 <Route exact path='/folders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData} onDeleteFolder={handleDeleteFolder} onCreateFolder={handleFolderCreationSuccess} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
-                <Route exact path='/folders/:folderId' element={<FolderContentComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>}/>
-                <Route exact path='/recent' element={<RecentPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
-                <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
+                <Route exact path='/folders/:folderId' element={<FolderContentComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>}/>
+                <Route exact path='/recent' element={<RecentPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>} />
+                <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>} />
             </Routes>
         </div>
         {isSidebarOpen && screenWidth < 768 && (

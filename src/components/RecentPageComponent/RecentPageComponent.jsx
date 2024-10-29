@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import FileList from '../FileListComponent/FileListComponent';
 import noRecentFiles from '../../assets/images/no-recents.webp'; // Ensure this image exists in the specified path
+import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
-const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onUploadFile, onDeleteFile }) => {
+const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },setFileData, onUploadFile, onDeleteFile,onCreateFolder }) => {
   const { files = [] } = fileAndFolderData;
   const [searchQuery, setSearchQuery] = useState('');
 
+  const handleDownloadUpdate = (downloadedFileId) => {
+    setFileData((prevFiles) =>
+      prevFiles.map((file) =>
+        file._id === downloadedFileId
+          ? { ...file, lastOpenedAt: new Date().toISOString() } // Update last opened date or any other needed info
+          : file
+      )
+    );
+  };
   const handleFileUpload = (fileId) => {
     onUploadFile(fileId);
   };
@@ -15,15 +25,20 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
     onDeleteFile(fileId);
   };
 
-  // Helper function to calculate day difference between two dates
+  const handleFolderCreation = (folderId) => {
+    onCreateFolder(folderId);
+  };
   const calculateDayDiff = (date) => {
     const today = new Date();
     const fileDate = new Date(date);
-    const daysDiff = Math.floor((today - fileDate) / (1000 * 60 * 60 * 24));
-    return daysDiff;
+    
+    today.setHours(0, 0, 0, 0);  // Midnight for today's date
+    fileDate.setHours(0, 0, 0, 0); // Midnight for file's date
+  
+    const timeDiff = today - fileDate;
+    return Math.floor(timeDiff / (1000 * 60 * 60 * 24));
   };
-
-  // Filter functions for different categories
+  
   const filterToday = (file) => calculateDayDiff(file.lastOpenedAt) === 0;
   const filterYesterday = (file) => calculateDayDiff(file.lastOpenedAt) === 1;
   const filterEarlierThisWeek = (file) => calculateDayDiff(file.lastOpenedAt) >= 2 && calculateDayDiff(file.lastOpenedAt) <= 6;
@@ -32,7 +47,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
   const filterLastMonth = (file) => calculateDayDiff(file.lastOpenedAt) > 30 && calculateDayDiff(file.lastOpenedAt) <= 60;
   const filterEarlierThisYear = (file) => calculateDayDiff(file.lastOpenedAt) > 60;
 
-  // Function to filter and sort files based on search query
+  
   const myFilesFilter = (file) => {
     return file.fileName.toLowerCase().includes(searchQuery.toLowerCase());
   };
@@ -61,12 +76,19 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
     <React.Fragment>
       <div className='px-8 py-16'>
      
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className='flex items-center w-full justify-between'>
+          <div className='w-10/12'>
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </div>
+          <div>
+            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+          </div>
+        </div>
       
         
-        {/* Conditionally Render Categories */}
+        
         {todayFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Today</p>
             <FileList
               files={todayFiles}
@@ -74,12 +96,15 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true} 
+              setFileData={setFileData}
+              onDownloadUpdate={handleDownloadUpdate}
+
             />
-          </>
+          </div>
         )}
 
         {yesterdayFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Yesterday</p>
             <FileList
               files={yesterdayFiles}
@@ -87,12 +112,13 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
+              setFileData={setFileData}
             />
-          </>
+          </div>
         )}
 
         {earlierThisWeekFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Week</p>
             <FileList
               files={earlierThisWeekFiles}
@@ -101,11 +127,11 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
             />
-          </>
+          </div>
         )}
 
         {lastWeekFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Last Week</p>
             <FileList
               files={lastWeekFiles}
@@ -113,12 +139,13 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
+              setFileData={setFileData}
             />
-          </>
+          </div>
         )}
 
         {earlierThisMonthFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Month</p>
             <FileList
               files={earlierThisMonthFiles}
@@ -126,12 +153,13 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
+              setFileData={setFileData}
             />
-          </>
+          </div>
         )}
 
         {lastMonthFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Last Month</p>
             <FileList
               files={lastMonthFiles}
@@ -139,12 +167,13 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
+              setFileData={setFileData}
             />
-          </>
+          </div>
         )}
 
         {earlierThisYearFiles.length > 0 && (
-          <>
+          <div>
             <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Year</p>
             <FileList
               files={earlierThisYearFiles}
@@ -152,11 +181,12 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] }, o
               onDeleteFile={handleFileDeletion}
               onUploadFile={handleFileUpload}
               showLastOpenedDate={true}
+              setFileData={setFileData}
             />
-          </>
+          </div>
         )}
 
-        {/* Render message and image if no files available */}
+        
         {noFiles && (
           <div className="mt-20 flex flex-col items-center h-[60vh] text-center">
             <img src={noRecentFiles} alt="No Files" className="w-96" />
