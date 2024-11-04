@@ -147,7 +147,7 @@ return (
         )}
         {(isSidebarOpen || screenWidth >= 768) && (
             <div
-                className={`sidebar-container font-inter bg-white lg:w-1/5 xl:w-1/6 rounded-l-3xl h-screen flex flex-col justify-between flex-shrink-0 ${
+                className={`sidebar-container font-inter bg-white lg:w-1/5 rounded-l-3xl h-screen flex flex-col justify-between flex-shrink-0 ${
                     screenWidth < 768 ? 'fixed top-0 left-0 w-2/3' : 'relative'
                 }`}
                 style={screenWidth < 768 ? { zIndex: 50 } : {}}
