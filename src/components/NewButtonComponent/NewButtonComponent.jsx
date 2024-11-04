@@ -23,6 +23,9 @@ const NewButtonComponent = ({ onCreateFolder,onUploadFile,parentId }) => {
     setShowCreateFolderForm(false);
     setDropdownVisible(false);
   };
+  const handleFolderCreation = (folderId) => {
+    onCreateFolder(folderId);
+  };
 
   const handleCancelCreateFolder = () => {
     setShowCreateFolderForm(false);
@@ -80,7 +83,7 @@ const NewButtonComponent = ({ onCreateFolder,onUploadFile,parentId }) => {
           <p className='text-xl mb-5'>New Folder</p>
             <CreateFolderForm
               parentId={parentId ?? null}
-              onCreateFolder={onCreateFolder}
+              onCreateFolder={handleFolderCreation}
               onCancel={handleCancelCreateFolder}
             />
           </div>

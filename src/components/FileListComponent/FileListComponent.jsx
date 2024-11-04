@@ -87,10 +87,10 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
   const sortedFiles = filteredFiles.sort(sortFn);
 
   return (
-    <div className='flex flex-wrap gap-4 w-full lg:gap-6 xl:gap-7 '>
+    <div className='flex flex-wrap gap-4 w-full lg:gap-6 xl:gap-7'>
       {sortedFiles.length > 0 ? (
         sortedFiles.map(file => (
-          <div className='bg-paleBlue w-full sm:w-64 py-3 px-5 rounded-xl relative xl:w-56 2xl:w-64' key={file._id}>
+          <div className='bg-paleBlue w-full py-3 px-5 rounded-xl relative sm:w-64 xl:w-56 2xl:w-64' key={file._id}>
             <div className='flex items-center leading-none text-black'>
               <img src={getFileIcon(file.fileFormat)} alt="" className='size-6' />
               <div className='flex justify-between w-full'>

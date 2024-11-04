@@ -78,7 +78,7 @@ const FolderContentComponent = ({
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
           <div>
-            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+            <ProfilebarComponent parentId={folderId} onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
       {currentFolder ? (

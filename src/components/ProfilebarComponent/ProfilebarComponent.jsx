@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
 import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 
-const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
+const ProfilebarComponent = ({ onUploadFile, onCreateFolder,parentId,setFileData }) => {
     const [user, setUser] = useState(null); 
     const [dropdownOpen, setDropdownOpen] = useState(false); 
     const dropdownRef = useRef(null); 
@@ -14,7 +14,6 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
             try {
                 const response = await axiosInstance.get('/userdata'); 
                 setUser(response.data);
-                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching user:', error.response ? error.response.data : error.message);
             }
@@ -22,12 +21,12 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
         fetchUser();
     }, []);
 
-    // Close dropdown on outside click
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdownOpen(false);
-                enableScrolling(); // Re-enable scrolling
+                enableScrolling(); 
             }
         };
         
@@ -52,9 +51,13 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
         document.body.style.overflow = '';
     };
 
-    const signout = () => {
-        localStorage.removeItem('token');
-        navigate('/');
+    const signout = async () => {
+        try {
+            await axiosInstance.post('/signout'); 
+            navigate('/'); 
+        } catch (error) {
+            console.error('Error during sign out:', error);
+        }
     };
 
     const handleFileUpload = (fileId) => {
@@ -72,7 +75,12 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
     return (
         <div className='flex gap-5 items-center relative'>
             <div className='hidden sm:block sm:text-base sm:font-semibold'>
-                <NewButtonComponent onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload} />
+                <NewButtonComponent
+                    parentId={parentId ?? ''}
+                    onCreateFolder={handleFolderCreation}
+                    onUploadFile={handleFileUpload}
+                    setFileData={setFileData}
+                />
             </div>
 
             
@@ -82,7 +90,7 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder }) => {
 
             
             {dropdownOpen && (
-                <div ref={dropdownRef} className=' absolute top-12 mt-5 right-0 bg-paleBlue shadow-lg rounded-3xl px-20 py-6'>
+                <div ref={dropdownRef} className=' absolute z-10 top-12 mt-5 right-0 bg-paleBlue shadow-lg rounded-3xl px-20 py-6'>
                     <p className='text-lg'>{user.email}</p>
                     <div className='flex justify-center my-5'>
                         <div className='flex items-center justify-center size-20 text-3xl bg-blue-500 text-white rounded-full '>

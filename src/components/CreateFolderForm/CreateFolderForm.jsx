@@ -31,13 +31,13 @@ const CreateFolderForm = ({ parentId, onCreateFolder,onCancel }) => {
         type="text"
         placeholder="Folder Name"
         value={folderName}
-        onChange={(e) => setFolderName(e.target.value)}
+        onChange={handleInputChange}
         required
         className="border border-gray-400 focus:border-2 hover:border-gray-800 focus:border-lightBlue outline-none px-6 py-2 rounded"
       />
       <br />
       <div className='flex justify-end gap-3 mt-8 pr-1'>
-        <button onClick={onCancel} className="text-sm text-lightBlue ">Cancle</button>
+        <button onClick={onCancel} className="text-sm text-lightBlue ">Cancel</button>
         <button type="submit" className="text-sm text-lightBlue ">Create</button>
       </div>
       

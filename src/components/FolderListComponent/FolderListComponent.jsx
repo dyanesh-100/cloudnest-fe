@@ -54,13 +54,13 @@ const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
         folders
           .filter((folder) => folder.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
           .map((folder) => (
-            <div className='bg-paleBlue w-full sm:w-64 py-3 px-5 rounded-xl relative' key={folder._id}>
+            <div className='bg-paleBlue w-full sm:w-64 xl:w-56 2xl:w-64 py-3 px-5 xl:px-4 rounded-xl relative' key={folder._id}>
               
               <Link to={`/cloudnest/folders/${folder._id}`} className='flex items-center'>
                 <FontAwesomeIcon icon={faFolder} className='text-black size-6' />
-                <div className='flex justify-between items-center leading-none text-black pl-5 w-full'>
+                <div className='flex justify-between items-center leading-none text-black pl-5 xl:pl-4 w-full'>
                   <div>
-                    <p className='text-sm truncate max-w-[150px]'>{folder.folderName}</p>
+                    <p className='text-sm truncate max-w-[140px]'>{folder.folderName}</p>
                     <p className='text-xs'>
                       {new Date(folder.createdAt).toLocaleString(undefined, {
                         year: 'numeric',
@@ -77,7 +77,7 @@ const FolderList = ({ folders, searchQuery, onDeleteFolder }) => {
 
               
               <EllipsisVertical
-                className='cursor-pointer absolute top-4 right-5'
+                className='cursor-pointer absolute top-4 right-5 xl:right-2'
                 onClick={() => handleToggleOptions(folder._id)}
               />
 

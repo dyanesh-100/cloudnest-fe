@@ -23,9 +23,10 @@ const SignUpComponent = () => {
 
         axiosInstance.post(`/signup`, { firstName, lastName, email, password })
             .then((response) => {
-                toast.success(`Successfully created account for ${response.data.firstName} ${response.data.lastName}`);
-                window.localStorage.setItem('token', response.data.token);
+                if (response.status === 201) {
+                toast.success(`Successfully created account for ${firstName} ${lastName}`);
                 navigate('/cloudnest/home');
+                }
             })
             .catch((error) => {
                 if (error.response) {
@@ -38,6 +39,16 @@ const SignUpComponent = () => {
                     toast.error(`Error: ${error.message}`);
                 }
             });
+    };
+    const handleGoogleSignIn = async () => {
+        try {
+            const response = await axiosInstance.get('/page-request');
+            console.log(response.data.data)
+            const googleAuthUrl = response.data.data;
+            window.location.href = googleAuthUrl;
+        } catch (error) {
+            toast.error("Failed to initiate Google Sign-In");
+        }
     };
 
     return (
@@ -101,6 +112,16 @@ const SignUpComponent = () => {
                         style={{ marginTop: '20px' }}
                     >
                         Sign Up
+                    </Button>
+                    <div style={{ textAlign: 'center', margin: '20px 0' }}>or</div>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        fullWidth
+                        onClick={handleGoogleSignIn}
+                        style={{ marginBottom: '20px' }}
+                    >
+                        Sign in with Google
                     </Button>
                 </form>
                 <Typography variant="body2" align="center" style={{ marginTop: '10px' }}>

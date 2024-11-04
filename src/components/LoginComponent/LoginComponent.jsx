@@ -17,8 +17,6 @@ const LoginComponent = () => {
     const submitHandler = (event) => {
         event.preventDefault();
         axiosInstance
-        
-        
             .post(`/login`, {
                 email: email,
                 password: password
@@ -26,7 +24,6 @@ const LoginComponent = () => {
             .then((response) => {
                 if (response.status === 201) {
                     toast.success(`Welcome ${response.data.firstName} ${response.data.lastName}`);
-                    window.localStorage.setItem('token', response.data.token);
                     navigate('/cloudnest/home');
                 }
             })
@@ -43,7 +40,16 @@ const LoginComponent = () => {
                 }
             });
     };
-
+    const handleGoogleSignIn = async () => {
+        try {
+            const response = await axiosInstance.get('/page-request');
+            console.log(response.data.data)
+            const googleAuthUrl = response.data.data;
+            window.location.href = googleAuthUrl;
+        } catch (error) {
+            toast.error("Failed to initiate Google Sign-In");
+        }
+    };
     return (
         <Container maxWidth="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             <Paper elevation={3} style={{ padding: '40px', width: '100%' }}>
@@ -87,6 +93,16 @@ const LoginComponent = () => {
                         style={{ marginTop: '20px' }}
                     >
                         Login
+                    </Button>
+                    <div style={{ textAlign: 'center', margin: '20px 0' }}>or</div>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        fullWidth
+                        onClick={handleGoogleSignIn}
+                        style={{ marginBottom: '20px' }}
+                    >
+                        Sign in with Google
                     </Button>
                 </form>
                 <Typography variant="body2" align="center" style={{ marginTop: '10px' }}>
