@@ -12,7 +12,7 @@ import RecentPageComponent from '../RecentPageComponent/RecentPageComponent';
 import FavouritesPageComponent from '../FavouritesPageComponent/FavouritesPageComponent';
 
 import './SidebarComponent.css'
-import {bytesToGB} from '../../utils/utils';
+import {bytesToGB,bytesToMB} from '../../utils/utils';
 import axiosInstance from '../../axiosInstance';
 import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
@@ -157,7 +157,7 @@ return (
                         <img src={logo} alt="" className='rounded-full w-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
                         <div className=''>
                             <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>
-                            <p className='text-grey'>Trusted Cloud</p>
+                            <p className='text-grey lg:text-sm'>Trusted Cloud</p>
                         </div>
                     </Link>
                     <hr className='border-lightGrey ' />
@@ -199,7 +199,9 @@ return (
                             className="!h-2 w-full rounded-md mt-4"
                         />
                         <div className="text-sm text-gray-600 mt-2">
-                            {bytesToGB(totalUsedStorage)} GB of {maxStorage} GB used
+                        {totalUsedStorage < 100 * 1024 * 1024 
+                            ? `${bytesToMB(totalUsedStorage)} MB` 
+                            : `${bytesToGB(totalUsedStorage)} GB`} of {maxStorage} GB used
                         </div>
                     </div>
                 </div>

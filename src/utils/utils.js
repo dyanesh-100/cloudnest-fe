@@ -10,6 +10,11 @@ export const bytesToGB = (bytes) =>{
     const GB = 1024 * 1024 * 1024
     return(bytes/GB).toFixed(2)
 }
+export const bytesToMB = (bytes) => {
+  const MB = 1024 * 1024;
+  return (bytes / MB).toFixed(2);
+}
+
 
 const fileFormatIcons = {
     'application/pdf': pdf,
