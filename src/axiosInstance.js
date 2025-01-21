@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3500/api/v1',
+    baseURL: 'https://cloudnest-be.vercel.app/api/v1',
     //http://localhost:3500/api/v1
     //https://cloudnest-be.vercel.app/api/v1
 });
