@@ -55,10 +55,10 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData,onUploadFile,onCrea
     <React.Fragment>
       <div className="px-8 py-16">
         <div className='flex items-center w-full justify-between'>
-          <div className='w-10/12'>
+          <div className='mt-10 w-full sm:w-10/12'>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
-          <div>
+          <div className='hidden sm:block'>
             <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
@@ -72,9 +72,9 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData,onUploadFile,onCrea
           </div>
         ) : favouriteFiles.length > 0 ? (
 
-          <div className='mt-20'>
+          <div className='mt-10 sm:mt-20'>
             <div>
-              <p className='text-2xl mb-10 font-medium'>Favourites</p>
+              <p className='text-2xl mb-5 sm:mb-10 font-medium'>Favourites</p>
             </div>
             <FileList
               files={favouriteFiles.filter(myFilesFilter)} 

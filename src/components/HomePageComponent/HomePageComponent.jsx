@@ -36,11 +36,11 @@ const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onD
   return (
     <div className='bg-white h-screen flex'>
       <div className=' w-full px-10'>
-      <div className="flex w-full items-center justify-center pt-20 pb-10 sm:py-16 relative">
-        <div className="hidden sm:text-center sm:block">
+      <div className="flex w-full items-center justify-center pt-20 pb-5 sm:py-16 relative">
+        <div className="hidden sm:text-center lg:block">
           <p className="font-medium text-2xl">WELCOME TO CLOUDNEST</p>
         </div>
-        <div className="sm:absolute sm:right-0">
+        <div className="hidden md:block sm:absolute sm:right-0">
           <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
         </div>
       </div>

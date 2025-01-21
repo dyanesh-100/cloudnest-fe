@@ -28,10 +28,10 @@ const MyFolderPageComponent = ({ fileAndFolderData = { files: [], folders: [] },
     <div className='bg-white h-screen flex'>
       <div className='px-8 py-16 w-full'>
         <div className='flex items-center w-full justify-between'>
-          <div className='w-10/12'>
+          <div className='mt-10 w-full sm:w-10/12'>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
-          <div>
+          <div className='hidden sm:block'>
             <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
@@ -48,7 +48,7 @@ const MyFolderPageComponent = ({ fileAndFolderData = { files: [], folders: [] },
         ) : (
           
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>My folders</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>My folders</p>
             <FolderList 
               folders={rootFolders}
               searchQuery={searchQuery} 

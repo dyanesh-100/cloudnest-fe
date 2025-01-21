@@ -15,6 +15,7 @@ import './SidebarComponent.css'
 import {bytesToGB,bytesToMB} from '../../utils/utils';
 import axiosInstance from '../../axiosInstance';
 import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
+import SearchBar from '../SearchBarComponent/SearchBarComponent';
 
 const SidebarComponent = () => {
     const [totalUsedStorage, setTotalUsedStorage] = useState(0);
@@ -23,6 +24,7 @@ const SidebarComponent = () => {
     const [usagePercentage, setUsagePercentage] = useState(0)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [searchQuery, setSearchQuery] = useState('');
     const [categorizedSizes ,setCategorizedSize ] = useState({
         documentSize : 0,
         videoSize : 0,
@@ -125,7 +127,7 @@ const SidebarComponent = () => {
 return (
     <div className="flex h-screen relative">
         {screenWidth < 768 && (
-            <div className='fixed flex w-full justify-between px-5 py-5 items-center'>
+            <div className='fixed flex w-full justify-between px-5 py-2 items-center top-0 left-0 right-0 bg-white z-50'>
                 <button
                     className="hamburger-button  top-4 left-4 z-50"
                     onClick={handleSidebarToggle}
@@ -133,12 +135,15 @@ return (
                     <Menu/>
                     <span className={`hamburger-icon ${isSidebarOpen ? 'open' : ''}`}></span>
                 </button>
-                <Link to='/' className='flex gap-3 items-center sm:hidden'>
+                
+                
+                    <Link to='/cloudnest/home' className='flex gap-2 items-center sm:hidden'>
                         <img src={logo} alt="" className='rounded-full size-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
                         <div className=''>
-                            <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>
+                            <span className='text-2xl sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-agu text-lightBlue'>Cloud</span>
+                            <span className='text-2xl sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-agu text-grey'>Nest</span>
                         </div>
-                    </Link>
+                    </Link> 
                 <div>
                     <ProfilebarComponent onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} />
                 </div>
@@ -153,7 +158,7 @@ return (
                 style={screenWidth < 768 ? { zIndex: 50 } : {}}
             >
                 <div className=''>
-                    <Link to='/' className='flex gap-3 items-center py-10 px-8'>
+                    <Link to='/cloudnest/home' className='flex gap-3 items-center py-10 px-8'>
                         <img src={logo} alt="" className='rounded-full w-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
                         <div className=''>
                             <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>

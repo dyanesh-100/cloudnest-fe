@@ -77,19 +77,18 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
       <div className='px-8 py-16'>
      
         <div className='flex items-center w-full justify-between'>
-          <div className='w-10/12'>
+          <div className='mt-10 w-full sm:w-10/12'>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
-          <div>
+          <div className='hidden sm:block'>
             <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
       
         
-        
         {todayFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Today</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Today</p>
             <FileList
               files={todayFiles}
               sortFn={sortFn}
@@ -105,7 +104,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {yesterdayFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Yesterday</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Yesterday</p>
             <FileList
               files={yesterdayFiles}
               sortFn={sortFn}
@@ -119,7 +118,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {earlierThisWeekFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Week</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Earlier This Week</p>
             <FileList
               files={earlierThisWeekFiles}
               sortFn={sortFn}
@@ -132,7 +131,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {lastWeekFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Last Week</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Last Week</p>
             <FileList
               files={lastWeekFiles}
               sortFn={sortFn}
@@ -146,7 +145,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {earlierThisMonthFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Month</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Earlier This Month</p>
             <FileList
               files={earlierThisMonthFiles}
               sortFn={sortFn}
@@ -160,7 +159,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {lastMonthFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Last Month</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Last Month</p>
             <FileList
               files={lastMonthFiles}
               sortFn={sortFn}
@@ -174,7 +173,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
         {earlierThisYearFiles.length > 0 && (
           <div>
-            <p className='mt-20 mb-10 text-2xl font-semibold'>Earlier This Year</p>
+            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Earlier This Year</p>
             <FileList
               files={earlierThisYearFiles}
               sortFn={sortFn}

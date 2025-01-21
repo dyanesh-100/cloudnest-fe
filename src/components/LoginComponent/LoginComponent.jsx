@@ -23,8 +23,13 @@ const LoginComponent = () => {
             })
             .then((response) => {
                 if (response.status === 201) {
-                    toast.success(`Welcome ${response.data.firstName} ${response.data.lastName}`);
+                    toast.success(`Welcome ${response.data.firstName} ${response.data.lastName}`, {
+                        position: "bottom-right",
+                      });
                     navigate('/cloudnest/home');
+                }
+                else{
+                    navigate('/');
                 }
             })
             .catch((error) => {

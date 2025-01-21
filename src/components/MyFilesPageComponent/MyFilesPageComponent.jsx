@@ -45,10 +45,10 @@ const MyFilesComponent = ({
   return (
     <div className='bg-white h-screen flex flex-col items-center px-8 pt-16'>
       <div className='flex items-center w-full justify-between'>
-        <div className='w-10/12'>
+        <div className='mt-10 w-full sm:w-10/12'>
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
-        <div>
+        <div className='hidden sm:block'>
           <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
         </div>
       </div>
@@ -66,7 +66,7 @@ const MyFilesComponent = ({
         <div className='w-full'>
           {!searchQuery && (
             <div>
-              <p className='mt-20 mb-10 text-2xl font-semibold'>Recently Added Files</p>
+              <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Recently Added Files</p>
               <FileList
                 files={files.filter(recentlyAddedFilesFilter)}
                 sortFn={sortFn}
@@ -74,12 +74,12 @@ const MyFilesComponent = ({
                 onUploadFile={handleFileUpload}
                 setFileData={setFileData}
               />
-              <p className='mt-20 text-2xl font-semibold'>Upload Files</p>
+              <p className='mt-10 sm:mt-20 text-2xl font-semibold'>Upload Files</p>
               <FileUploadComponent currentFolderId={null} onUploadFile={handleFileUpload} />
             </div>
           )}
 
-          <p className='mt-20 mb-10 text-2xl font-semibold'>My Files</p>
+          <p className='mt-10 mb-10 sm:mt-20 sm:mb-10 text-2xl font-semibold'>My Files</p>
           <div className='pb-16'>
             <FileList
               files={files.filter(myFilesFilter)}

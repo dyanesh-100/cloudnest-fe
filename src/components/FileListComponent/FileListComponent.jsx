@@ -95,8 +95,8 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
               <img src={getFileIcon(file.fileFormat)} alt="" className='size-6' />
               <div className='flex justify-between w-full'>
                 <div>
-                  <p className='text-sm pl-3 truncate sm:max-w-[140px]'>{file.fileName}</p>
-                  <p className='text-xs pl-3 sm:hidden'>
+                  <p className='text-sm pl-3 truncate max-w-[180px]'>{file.fileName}</p>
+                  <p className='text-xs pl-3'>
                     {new Date(showLastOpenedDate ? file.lastOpenedAt : file.createdAt).toLocaleString(undefined, {
                       year: 'numeric',
                       month: 'short',
@@ -109,7 +109,7 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
                 </div>
                 
                 <EllipsisVertical
-                  className=''
+                  className='cursor-pointer absolute top-4 right-5 xl:right-2'
                   onClick={() => handleToggleOptions(file._id)}
                 />
               </div>
@@ -117,7 +117,7 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
             <div className='hidden sm:bg-white sm:flex sm:justify-center sm:px-10 sm:py-16 sm:rounded-l sm:my-5'>
               <img className='sm:w-14' src={getFileIcon(file.fileFormat)} alt="" />
             </div>
-            <p className=' sm:text-xs'>
+            <p className='hidden sm:text-xs'>
               {new Date(showLastOpenedDate ? file.lastOpenedAt : file.createdAt).toLocaleString(undefined, {
                 year: 'numeric',
                 month: 'short',
@@ -159,7 +159,7 @@ const FileList = ({ files, filterFn, sortFn, onDeleteFile,setFileData,showLastOp
         ))
       ) : (
         <p>
-          hello
+          Files yet to be uploaded!!
         </p>
       )}
 

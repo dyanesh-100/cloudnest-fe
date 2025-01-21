@@ -84,7 +84,7 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder,parentId,setFileData
             </div>
 
             
-            <div onClick={toggleDropdown} className='flex text-xl items-center justify-center size-12  hover:border-lightGrey hover:border-lightGrey bg-blue-500 text-white rounded-full cursor-pointer border-4 border-paleBlue'>
+            <div onClick={toggleDropdown} className='flex text-xl items-center justify-center size-12 hover:border-lightGrey bg-blue-500 text-white rounded-full cursor-pointer border-4 border-paleBlue'>
                 {user ? user.firstName[0].toUpperCase() : 'U'}
             </div>
 
