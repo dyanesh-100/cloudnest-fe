@@ -20,19 +20,13 @@ const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
     acceptedFiles.forEach((file) => {
       formData.append('file', file);
     });
-
-    console.log('Uploading files:', acceptedFiles);
     const toastId = toast.loading("File uploading");
 
     try {
       const parentId = currentFolderId || ''; 
       
       
-      const response = await axiosInstance.post(`/upload/${parentId}`, formData);
-
-      console.log('File uploaded successfully:', response.data);
-
-      
+      const response = await axiosInstance.post(`/upload/${parentId}`, formData);      
       if (typeof onUploadFile === 'function') {
         onUploadFile(response.data.data);
         toast.update(toastId, { 

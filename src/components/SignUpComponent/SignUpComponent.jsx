@@ -43,7 +43,6 @@ const SignUpComponent = () => {
     const handleGoogleSignIn = async () => {
         try {
             const response = await axiosInstance.get('/page-request');
-            console.log(response.data.data)
             const googleAuthUrl = response.data.data;
             window.location.href = googleAuthUrl;
         } catch (error) {

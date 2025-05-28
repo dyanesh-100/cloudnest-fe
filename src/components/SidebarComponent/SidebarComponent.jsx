@@ -142,6 +142,7 @@ return (
                         <div className=''>
                             <span className='text-2xl sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-agu text-lightBlue'>Cloud</span>
                             <span className='text-2xl sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-agu text-grey'>Nest</span>
+                            
                         </div>
                     </Link> 
                 <div>

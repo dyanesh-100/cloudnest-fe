@@ -74,16 +74,16 @@ const FolderContentComponent = ({
   return (
     <div className='flex flex-col w-full py-16 px-8'>
       <div className='flex items-center w-full justify-between'>
-          <div className='w-10/12'>
+          <div className='mt-10 w-full sm:w-10/12'>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
-          <div>
+          <div className='hidden sm:block'>
             <ProfilebarComponent parentId={folderId} onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
       {currentFolder ? (
         <div>
-          <h2 className='text-xl font-medium mt-20'>{renderPath()}</h2>
+          <h2 className='mt-10 text-lg font-medium sm:mt-20'>{renderPath()}</h2>
 
           {subFolders.length === 0 && currentFiles.length === 0 && (
             <div className='flex flex-col items-center mt-20 text-center'>

@@ -48,8 +48,9 @@ const LoginComponent = () => {
     const handleGoogleSignIn = async () => {
         try {
             const response = await axiosInstance.get('/page-request');
-            console.log(response.data.data)
             const googleAuthUrl = response.data.data;
+            console.log(googleAuthUrl);
+            
             window.location.href = googleAuthUrl;
         } catch (error) {
             toast.error("Failed to initiate Google Sign-In");
