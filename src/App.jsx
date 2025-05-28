@@ -17,7 +17,7 @@ const App = () => {
             <Route path="/" element={<LoginComponent/>} />
             <Route path="/signup" element={<SignUpComponent/>} />
             <Route path="/google-account-verification" element={<GoogleAccountVerification/>} />
-            <Route path="/cloudnest/*"  element={<SidebarComponent/>}/>             
+            <Route path="/*"  element={<SidebarComponent/>}/>             
           </Routes>
         </BrowserRouter>
       </div>

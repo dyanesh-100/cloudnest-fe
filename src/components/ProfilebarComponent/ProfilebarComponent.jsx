@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
 import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
 
@@ -8,6 +8,7 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder,parentId,setFileData
     const [dropdownOpen, setDropdownOpen] = useState(false); 
     const dropdownRef = useRef(null); 
     const navigate = useNavigate();
+    const { folderId } = useParams(); 
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -76,7 +77,7 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder,parentId,setFileData
         <div className='flex gap-5 items-center relative'>
             <div className='hidden sm:block sm:text-base sm:font-semibold'>
                 <NewButtonComponent
-                    parentId={parentId ?? ''}
+                    parentId={folderId}
                     onCreateFolder={handleFolderCreation}
                     onUploadFile={handleFileUpload}
                     setFileData={setFileData}
@@ -87,8 +88,6 @@ const ProfilebarComponent = ({ onUploadFile, onCreateFolder,parentId,setFileData
             <div onClick={toggleDropdown} className='flex text-xl items-center justify-center size-12 hover:border-lightGrey bg-blue-500 text-white rounded-full cursor-pointer border-4 border-paleBlue'>
                 {user ? user.firstName[0].toUpperCase() : 'U'}
             </div>
-
-            
             {dropdownOpen && (
                 <div ref={dropdownRef} className=' absolute z-10 top-12 mt-5 right-0 bg-paleBlue shadow-lg rounded-3xl px-20 py-6'>
                     <p className='text-lg'>{user.email}</p>

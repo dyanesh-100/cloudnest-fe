@@ -137,7 +137,7 @@ return (
                 </button>
                 
                 
-                    <Link to='/cloudnest/home' className='flex gap-2 items-center sm:hidden'>
+                    <Link to='/home' className='flex gap-2 items-center sm:hidden'>
                         <img src={logo} alt="" className='rounded-full size-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
                         <div className=''>
                             <span className='text-2xl sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-agu text-lightBlue'>Cloud</span>
@@ -159,7 +159,7 @@ return (
                 style={screenWidth < 768 ? { zIndex: 50 } : {}}
             >
                 <div className=''>
-                    <Link to='/cloudnest/home' className='flex gap-3 items-center py-10 px-8'>
+                    <Link to='/home' className='flex gap-3 items-center py-10 px-8'>
                         <img src={logo} alt="" className='rounded-full w-10 sm:w-14 md:w-16 lg:w-18 xl:w-20 ' />
                         <div className=''>
                             <p className='text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl'>CloudNest</p>
@@ -169,23 +169,23 @@ return (
                     <hr className='border-lightGrey ' />
                     <p className='text-grey mt-8 text-sm py-0 px-8'>General Menu</p>
                     <div className='text-lg px-8'>
-                        <Link to='/cloudnest/home' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                        <Link to='/home' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                             <House />
                             <p>Home</p>
                         </Link>
-                        <Link to='/cloudnest/myfiles' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                        <Link to='/myfiles' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                             <Files />
                             <p>My Files</p>
                         </Link>
-                        <Link to='/cloudnest/folders' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                        <Link to='/myfolders' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                             <FolderClosed />
                             <p>My Folders</p>
                         </Link>
-                        <Link to='/cloudnest/recent' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                        <Link to='/recent' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                             <Clock />
                             <p>Recent</p>
                         </Link>
-                        <Link to='/cloudnest/favourites' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
+                        <Link to='/myfavourites' onClick={handleSidebarToggle} className='flex text-black gap-2 items-center mt-6 font-semibold hover:bg-lightGrey active:bg-grey focus:outline-none focus:ring focus:grey rounded-xl p-1.5'>
                             <Star />
                             <p>Favourites</p>
                         </Link>
@@ -219,10 +219,10 @@ return (
             <Routes>
                 <Route exact path='/home' element={<HomePageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} setFileData={setFileData} onCreateFolder={handleFolderCreationSuccess} onUploadFile={handleFileUploadSuccess}/>} />
                 <Route exact path='/myfiles' element={<MyFilesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
-                <Route exact path='/folders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData} onDeleteFolder={handleDeleteFolder} onCreateFolder={handleFolderCreationSuccess} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
-                <Route exact path='/folders/:folderId' element={<FolderContentComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>}/>
+                <Route exact path='/myfolders' element={<MyFoldersPageComponent fileAndFolderData={fileAndFolderData} onDeleteFolder={handleDeleteFolder} onCreateFolder={handleFolderCreationSuccess} onUploadFile={handleFileUploadSuccess} setFileData={setFileData}/>} />
+                <Route exact path='/myfolders/:folderId' element={<FolderContentComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onDeleteFolder={handleDeleteFolder} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>}/>
                 <Route exact path='/recent' element={<RecentPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>} />
-                <Route exact path='/favourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>} />
+                <Route exact path='/myfavourites' element={<FavouritesPageComponent fileAndFolderData={fileAndFolderData} onDeleteFile={handleDeleteFile} onUploadFile={handleFileUploadSuccess} onCreateFolder={handleFolderCreationSuccess} setFileData={setFileData}/>} />
             </Routes>
         </div>
         {isSidebarOpen && screenWidth < 768 && (

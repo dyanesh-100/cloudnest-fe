@@ -12,7 +12,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
     setFileData((prevFiles) =>
       prevFiles.map((file) =>
         file._id === downloadedFileId
-          ? { ...file, lastOpenedAt: new Date().toISOString() } // Update last opened date or any other needed info
+          ? { ...file, lastOpenedAt: new Date().toISOString() }
           : file
       )
     );
@@ -32,9 +32,8 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
     const today = new Date();
     const fileDate = new Date(date);
     
-    today.setHours(0, 0, 0, 0);  // Midnight for today's date
-    fileDate.setHours(0, 0, 0, 0); // Midnight for file's date
-  
+    today.setHours(0, 0, 0, 0);  
+    fileDate.setHours(0, 0, 0, 0); 
     const timeDiff = today - fileDate;
     return Math.floor(timeDiff / (1000 * 60 * 60 * 24));
   };
@@ -74,18 +73,17 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
 
   return (
     <React.Fragment>
-      <div className='px-8 py-16'>
-     
+      <div className='bg-white min-h-screen flex flex-col px-6 sm:px-8 pt-12 pb-8'>
         <div className='flex items-center w-full justify-between'>
-          <div className='mt-10 w-full sm:w-10/12'>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          </div>
-          <div className='hidden sm:block'>
-            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+          <div className='flex items-center w-full justify-between'>
+            <div className='w-full sm:w-auto sm:flex-1'>
+              <SearchBar className="w-full" searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            </div>
+            <div className='hidden sm:block'>
+              <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+            </div>
           </div>
         </div>
-      
-        
         {todayFiles.length > 0 && (
           <div>
             <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Today</p>
@@ -101,7 +99,6 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
             />
           </div>
         )}
-
         {yesterdayFiles.length > 0 && (
           <div>
             <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Yesterday</p>
@@ -115,7 +112,6 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
             />
           </div>
         )}
-
         {earlierThisWeekFiles.length > 0 && (
           <div>
             <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Earlier This Week</p>
@@ -142,7 +138,7 @@ const RecentPageComponent = ({ fileAndFolderData = { folders: [], files: [] },se
             />
           </div>
         )}
-
+        
         {earlierThisMonthFiles.length > 0 && (
           <div>
             <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>Earlier This Month</p>

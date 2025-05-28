@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import FolderList from '../FolderListComponent/FolderListComponent';
 import FileListComponent from '../FileListComponent/FileListComponent';
 import NewButtonComponent from '../NewButtonComponent/NewButtonComponent';
-import emptyFolderFileImage from '../../assets/images/No-Files-Folders.webp'; // Import your image
+import emptyFolderFileImage from '../../assets/images/No-Files-Folders.webp';
 import SearchBar from '../SearchBarComponent/SearchBarComponent';
 import ProfilebarComponent from '../ProfilebarComponent/ProfilebarComponent';
 
 const FolderContentComponent = ({
-  fileAndFolderData = { folders: [], files: [] ,},
+  fileAndFolderData = { folders: [], files: [] },
   onUploadFile,
   onDeleteFile,
   onDeleteFolder,
@@ -32,6 +32,7 @@ const FolderContentComponent = ({
   const handleFolderCreation = (folderId) => {
     onCreateFolder(folderId);
   };
+
   const handleFolderDeletion = (folderId) => {
     onDeleteFolder(folderId);
   };
@@ -54,80 +55,113 @@ const FolderContentComponent = ({
   }, [fileAndFolderData, folderId]);
 
   const renderPath = () => {
-    if (!currentFolder) return 'My Folders';
-    let pathArray = [currentFolder.folderName];
-    let parent = currentFolder.parentId;
+    if (!currentFolder) {
+      return (
+        <span className="text-gray-800 font-medium">My Folders</span>
+      );
+    }
 
+    let pathArray = [{ id: currentFolder._id, name: currentFolder.folderName }];
+    let parent = currentFolder.parentId;
     while (parent) {
       const parentFolder = fileAndFolderData.folders.find((folder) => folder._id === parent);
       if (parentFolder) {
-        pathArray.unshift(parentFolder.folderName);
+        pathArray.unshift({ id: parentFolder._id, name: parentFolder.folderName });
         parent = parentFolder.parentId;
       } else {
         break;
       }
     }
+    pathArray.unshift({ id: null, name: "My Folders" });
 
-    return 'My Folders > ' + pathArray.join(' > ');
+    return (
+      <div className="flex flex-wrap items-center text-lg sm:text-xl">
+        {pathArray.map((item, index) => (
+          <React.Fragment key={item.id || 'root'}>
+            {index > 0 && (
+              <span className="mx-3 text-gray-500">/</span>
+            )}
+            {index === pathArray.length - 1 ? (
+              <span className="text-gray-800 font-semibold">
+                {item.name}
+              </span>
+            ) : (
+              <Link 
+                to={item.id ? `/myfolders/${item.id}` : '/myfolders'}
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 hover:underline hover:underline-offset-4"
+              >
+                {item.name}
+              </Link>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div className='flex flex-col w-full py-16 px-8'>
+    <div className='bg-white min-h-screen flex flex-col px-6 sm:px-8 pt-12 pb-8'>
       <div className='flex items-center w-full justify-between'>
-          <div className='mt-10 w-full sm:w-10/12'>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className='flex items-center w-full justify-between'>
+          <div className='w-full sm:w-auto sm:flex-1'>
+            <SearchBar className="w-full" searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
           <div className='hidden sm:block'>
-            <ProfilebarComponent parentId={folderId} onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
+      </div>
+      
       {currentFolder ? (
-        <div>
-          <h2 className='mt-10 text-lg font-medium sm:mt-20'>{renderPath()}</h2>
-
-          {subFolders.length === 0 && currentFiles.length === 0 && (
+        <div className='w-full max-w-7xl mt-10'>
+          <div className='mt-8 sm:mt-12 mb-6'>
+            {renderPath()}
+          </div>
+          
+          {subFolders.length === 0 && currentFiles.length === 0 ? (
             <div className='flex flex-col items-center mt-20 text-center'>
-              <img src={emptyFolderFileImage} alt='Empty Folder' className='mb-4 w-96' />
-              <p className='text-xl font-semibold text-gray-600'>This folder is empty!</p>
-              <p className='text-gray-500'>Add new folders or upload files to get started.</p>
-              <NewButtonComponent
-                parentId={folderId}
-                onCreateFolder={handleFolderCreation}
-                onUploadFile={handleFileUpload}
-                setFileData={setFileData}
-              />
+              <img src={emptyFolderFileImage} alt='Empty folder' className='w-64 sm:w-80 mb-6 opacity-90' />
+              <p className='text-2xl sm:text-3xl font-semibold text-gray-700 mb-2'>No folders created yet!</p>
+              <p className='text-gray-500 text-base sm:text-lg'>Start creating folders to better organize your files.</p>
+              <div className='px-6 py-3 text-lg'>
+                <NewButtonComponent
+                  parentId={folderId}
+                  onCreateFolder={handleFolderCreation}
+                  onUploadFile={handleFileUpload}
+                  setFileData={setFileData}
+                />              
+                </div>
             </div>
-          )}
-
-          
-          {subFolders.length > 0 && (
-            <div>
-              <h3 className='text-xl font-medium mt-8 mb-4'>Subfolders</h3>
-              <FolderList
-                folders={subFolders}
-                searchQuery={searchQuery} 
-                onFolderClick={() => setCurrentFolder(folderId)}
-                onDeleteFolder={handleFolderDeletion}
-                onCreateFolder={handleFolderCreation}
-              />
-            </div>
-          )}
-
-          
-          {currentFiles.length > 0 && (
+          ) : (
             <>
-              <h3 className='text-xl font-medium mt-8 mb-4'>Files</h3>
-              <FileListComponent
-                files={currentFiles.filter(myFilesFilter)}
-                onFolderClick={() => setCurrentFolder(folderId)}
-                onDeleteFile={handleFileDeletion}
-                setFileData={setFileData}
-              />
+              {subFolders.length > 0 && (
+                <div className="mb-8">
+                  <FolderList
+                    folders={subFolders}
+                    searchQuery={searchQuery} 
+                    onDeleteFolder={handleFolderDeletion}
+                    onCreateFolder={handleFolderCreation}
+                  />
+                </div>
+              )}
+              
+              {currentFiles.length > 0 && (
+                <div>
+                  <p className='text-xl sm:text-2xl font-semibold text-gray-800 mb-6'>Files</p>
+                  <FileListComponent
+                    files={currentFiles.filter(myFilesFilter)}
+                    onDeleteFile={handleFileDeletion}
+                    setFileData={setFileData}
+                  />
+                </div>
+              )}
             </>
           )}
         </div>
       ) : (
-        <p>Loading folder content...</p>
+        <div className='flex flex-col items-center justify-center w-full max-w-2xl mt-12 sm:mt-24 text-center'>
+          <p className='text-2xl sm:text-3xl font-semibold text-gray-700 mb-2'>Loading folder...</p>
+        </div>
       )}
     </div>
   );

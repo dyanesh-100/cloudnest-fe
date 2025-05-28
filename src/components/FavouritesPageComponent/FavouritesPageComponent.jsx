@@ -53,25 +53,19 @@ const FavouritesPageComponent = ({ onDeleteFile, setFileData,onUploadFile,onCrea
 
   return (
     <React.Fragment>
-      <div className="px-8 py-16">
+      <div className="'bg-white min-h-screen flex flex-col px-6 sm:px-8 pt-12 pb-8">
         <div className='flex items-center w-full justify-between'>
-          <div className='mt-10 w-full sm:w-10/12'>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          </div>
-          <div className='hidden sm:block'>
-            <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+          <div className='flex items-center w-full justify-between'>
+            <div className='w-full sm:w-auto sm:flex-1'>
+              <SearchBar className="w-full" searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            </div>
+            <div className='hidden sm:block'>
+              <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
+            </div>
           </div>
         </div>
 
-        {loading ? (
-          <p>Loading favourite files...</p>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-            <p className="text-red-500 text-lg">{error}</p>
-            <p className="text-gray-500">Please try reloading the page or check back later.</p>
-          </div>
-        ) : favouriteFiles.length > 0 ? (
-
+        {favouriteFiles.length > 0 ? (
           <div className='mt-10 sm:mt-20'>
             <div>
               <p className='text-2xl mb-5 sm:mb-10 font-medium'>Favourites</p>

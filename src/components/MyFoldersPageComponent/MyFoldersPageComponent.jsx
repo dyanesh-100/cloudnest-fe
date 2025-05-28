@@ -23,41 +23,39 @@ const MyFolderPageComponent = ({ fileAndFolderData = { files: [], folders: [] },
   const handleFileUpload = (fileId) => {
     onUploadFile(fileId);
   };
-
   return (
-    <div className='bg-white h-screen flex'>
-      <div className='px-8 py-16 w-full'>
+    <div className='bg-white min-h-screen flex flex-col px-6 sm:px-8 pt-12 pb-8'>
+      <div className='flex items-center w-full justify-between'>
         <div className='flex items-center w-full justify-between'>
-          <div className='mt-10 w-full sm:w-10/12'>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <div className='w-full sm:w-auto sm:flex-1'>
+            <SearchBar className="w-full" searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </div>
           <div className='hidden sm:block'>
             <ProfilebarComponent onUploadFile={handleFileUpload} onCreateFolder={handleFolderCreation} />
           </div>
         </div>
-        {folders.length === 0 ? (
-          
-          <div className='flex flex-col items-center justify-center mt-15'>
-            <img src={noFolders} alt='No folders created' className='w-96' />
-            <p className='text-xl font-semibold text-gray-600'>No folders created yet!</p>
-            <p className='text-gray-500 mt-2'>Start creating folders to better organize your files.</p>
-            <div className='relative mt-10'>
-              <NewButtonComponent onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload} />
-            </div>
-          </div>
-        ) : (
-          
-          <div>
-            <p className='mt-10 mb-5 sm:mt-20 sm:mb-10 text-2xl font-semibold'>My folders</p>
-            <FolderList 
-              folders={rootFolders}
-              searchQuery={searchQuery} 
-              onDeleteFolder={handleFolderDeletion} 
-              onCreateFolder={handleFolderCreation} 
-            />
-          </div>
-        )}
       </div>
+      {folders.length === 0 ? (
+        <div className='flex flex-col items-center mt-20 text-center'>
+          <img src={noFolders} alt='No folders created' className='w-64 sm:w-80 mb-6 opacity-90' />
+          <p className='text-2xl sm:text-3xl font-semibold text-gray-700 mb-2'>No folders created yet!</p>
+          <p className='text-gray-500 text-base sm:text-lg'>Start creating folders to better organize your files.</p>
+          <div className='px-6 py-3 text-lg'>
+            <NewButtonComponent onCreateFolder={handleFolderCreation} onUploadFile={handleFileUpload} />
+          </div>
+        </div>
+      ) : (
+        
+        <div className='w-full max-w-7xl mt-10'>
+          <p className='mt-8 sm:mt-12 mb-6 text-xl sm:text-2xl font-semibold text-gray-800'>My folders</p>
+          <FolderList 
+            folders={rootFolders}
+            searchQuery={searchQuery} 
+            onDeleteFolder={handleFolderDeletion} 
+            onCreateFolder={handleFolderCreation} 
+          />
+        </div>
+      )}
     </div>
   );
 };

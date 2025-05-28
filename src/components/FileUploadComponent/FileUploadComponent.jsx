@@ -33,7 +33,7 @@ const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
           render: "File uploaded successfully!", 
           type: "success", 
           isLoading: false, 
-          autoClose: 3000 // auto close after 3 seconds
+          autoClose: 3000 
         }); 
       } else {
         console.error('onUploadSuccess is not a function');
@@ -44,39 +44,33 @@ const FileUploadComponent = ({ currentFolderId, onUploadFile }) => {
         render: "Error uploading files", 
         type: "error", 
         isLoading: false, 
-        autoClose: 3000 // auto close after 3 seconds
+        autoClose: 3000 
       });
     }
   };
 
   return (
-    
     <React.Fragment>
-      
-        
-            <div className='flex mt-10 '>
-            
-            <div
-                {...getRootProps()} 
-                className={`border-2 border-dashed border-lightBlue p-6 py-16 rounded-lg cursor-pointer w-full flex justify-center flex-col items-center ${
-                    isDragActive ? 'bg-gray-200' : 'bg-gray-100'
-                }`}
-                >
-                    <div className='bg-lightBlue rounded-full p-2 text-black mb-5'>
-                        <FileUp />
-                    </div>
-                    
-                <input {...getInputProps()} /> 
-                {isDragActive ? (
-                    <p>Drop the files here...</p>
-                ) : (
-                    <p>Drag and drop files here, or Browse</p>
-                )}
-            </div>
+      <div className='flex mt-10 '>
+        <div
+          {...getRootProps()} 
+          className={`border-2 border-dashed border-lightBlue p-6 py-16 rounded-lg cursor-pointer w-full flex justify-center flex-col items-center ${
+              isDragActive ? 'bg-gray-200' : 'bg-gray-100'
+          }`}
+          >
+              <div className='bg-lightBlue rounded-full p-2 text-black mb-5'>
+                  <FileUp />
+              </div>
+              
+          <input {...getInputProps()} /> 
+          {isDragActive ? (
+              <p>Drop the files here...</p>
+          ) : (
+              <p>Drag and drop files here, or Browse</p>
+          )}
         </div>
+      </div>
     </React.Fragment>
-    
-    
   );
 };
 

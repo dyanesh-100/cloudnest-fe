@@ -56,7 +56,6 @@ const HomePageComponent = ({ fileAndFolderData = { folders: [], files: [] }, onD
           </div>
         ) : (
           <div>
-            
             {showFoldersSection && (
               <div >
                 <p className='mt-10 mb-6 sm:mt-16 sm:mb-10 text-2xl font-semibold'>

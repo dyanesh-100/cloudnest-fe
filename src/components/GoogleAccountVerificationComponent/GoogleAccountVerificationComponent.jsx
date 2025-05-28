@@ -13,8 +13,6 @@ const GoogleAccountVerification = () => {
                 const response = await axiosInstance.get('/verify');
                 
                 if (response.status === 200) {
-                    console.log(response);
-                    
                     setIsUserLoggedIn(true);
                     document.cookie = `userProfile=${JSON.stringify(response.data.data)}; path=/;`;
                     navigate('/cloudnest/home');
