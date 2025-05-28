@@ -15,7 +15,7 @@ const GoogleAccountVerification = () => {
                 if (response.status === 200) {
                     setIsUserLoggedIn(true);
                     document.cookie = `userProfile=${JSON.stringify(response.data.data)}; path=/;`;
-                    navigate('/cloudnest/home');
+                    navigate('/home');
                     toast.success('Logged in successfully');
                 }
             } 

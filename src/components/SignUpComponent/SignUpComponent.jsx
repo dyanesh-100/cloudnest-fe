@@ -25,7 +25,7 @@ const SignUpComponent = () => {
             .then((response) => {
                 if (response.status === 201) {
                 toast.success(`Successfully created account for ${firstName} ${lastName}`);
-                navigate('/cloudnest/home');
+                navigate('/home');
                 }
             })
             .catch((error) => {

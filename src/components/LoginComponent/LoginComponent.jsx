@@ -26,7 +26,7 @@ const LoginComponent = () => {
                     toast.success(`Welcome ${response.data.firstName} ${response.data.lastName}`, {
                         position: "bottom-right",
                       });
-                    navigate('/cloudnest/home');
+                    navigate('/home');
                 }
                 else{
                     navigate('/');
